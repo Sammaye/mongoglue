@@ -2,7 +2,7 @@
 
 This is a very simple ORM designed for MongoDB.
 
-It is very much designed as a kind of [http://www.fisher-price.com/en_US/products/55197](Fisher-Price) "My First Active Record". Irrespective of that fact this ORM has 
+It is very much designed as a kind of (http://www.fisher-price.com/en_US/products/55197)[Fisher-Price] "My First Active Record". Irrespective of that fact this ORM has 
 been extensively tested in a live environment (as part of another project) and has been found to be quite fitting to most security needs.
 
 A lot of the documentation and examples can be found within the `tests` folder where PHPUnit tests are performed on each section of the ORM. The file `document.php`
@@ -136,12 +136,57 @@ Doing the same within a `afterX()` function will not have the same effect and fu
 - `beforeDelete()` runs before the deletion of the document
 - `afterDelete()` runs after deletion of the document
 
-### Adding behaviours
+### Scenarios
+
+Scenarios enable different actions at different times. The scenarios can apply in both manual coding and in the validation of a model.
+
+By default a new model will have a scenairo of `insert` and a saved model will have a scenario of `update`.
+
+Getters and setters are provided for the scenarios as part of the models public API:
+
+	function beforesave(){
+		$scenario = $this->getScenario();
+		$this->setScenario($scenario);
+	}
+
+### Relations
+
+Relations are vey useful if you intend to have a relational model of some kind.
+
+You can define a set of relations via the `relations` function within the model:
+
+	function relations(){
+		return array(
+			'testDetail' => array('one', 'testDetail', 'test_id'),
+			'testDetails' => array('many', 'testDetail', 'test_id'),
+			'embeddedDetails' => array('many', 'testDetail', '_id', 'on' => 'test_ids'),
+			'conditionalDetails' => array('many', 'testDetail', 'test_id', 'where' => array(
+				'name' => 'Programming'
+			))
+		);
+	}
+	
+As seen from the examples above you can set a variety of different options on a relation however the relation can only consist of:
+
+- A type as the first array position, `one` or `many`
+- A model as the second array position, i.e. `User`
+- A foreign key in the third position. By default mongoglue will attempt to connect the `_id` of the current document to the field you specify in the child document
+- A `on` clause, incase the `_id` is not the foreign key
+- A `where` clause to limit a relation
+
+It should be noted that the relational behaviour can support either a single `ObjectId` or a `DBRef` or an array of `OjbectId`s as the key for what information use from the parent 
+model to gather the children. As example, from the above code, `test_ids` is in fact an array of `ObjectId`s that denote all the `testDetail`s that are connected to this model.
+
+Note: Automatic Cascading is not supported by default within the ORM
+
+Note: MongoDB has no JOINs or relational integrity what-so-ever so you will need to take into account cascading etc on the application end.
+
+### Behaviours
 
 Behaviours are really useful if you want to add a common set of functions to many models. A good example of this is actually provided, as base, within this repository.
 
-The `Timestamp.php` file in the `behaviours` folder shows a pefect example of how common functionality can exist between many models. As you can see it hook into `beforeSave` and 
-implements a couple of helper functions. We will get nto events later.
+The `Timestamp.php` file in the `behaviours` folder shows a pefect example of how common functionality can exist between many models. As you can see it hooks into `beforeSave` and 
+implements a couple of helper functions.
 
 For an idea of what events the behaviour can implement look to the parent class in `\mongoglue\Behaviour`.
 
@@ -167,6 +212,10 @@ like so:
 The keys within the nested array whose key is the behaviour name represent class properties.
 
 Note: behaviours have no requirement to extend from `\mongoglue\Behaviour` provided you have the functions in your own file as well. 
+
+Note: A behaviours event hooks into the model will be run before your own, so tghe `Timestamp`s `beforesave()` hook will run before your own in model one.
+
+
 
 
 
