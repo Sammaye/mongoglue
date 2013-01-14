@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Mongoglue by Sammaye</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Mongoglue</h1>
+        <p>Another MongoDB ORM</p>
+
+        <p class="view"><a href="https://github.com/Sammaye/mongoglue">View the Project on GitHub <small>Sammaye/mongoglue</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/Sammaye/mongoglue/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/Sammaye/mongoglue/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/Sammaye/mongoglue">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Mongoglue ORM</h1>
+
+<p>This is a very simple ORM designed for MongoDB.</p>
+
+<p>It is very much designed a kind of "My First" of Active Record handling. Irrespective of that fact this ORM has been extensively tested in a live environment and has been
+found to be quite fitting to security needs in all tested cases.</p>
+
+<p>A lot of the documentation and examples can be found within the <code>tests</code> folder where PHPUnit tests are performed on each section of the ORM. The file <code>document.php</code>
+and the models in <code>tests/documents</code> would be of particular interest to new users.</p>
+
+<h2>The Why and How of Fry?</h2>
+
+<p>I built this as a personal project to understand how other frameworks do Active Record. This originally started out as a project to work along side Yiis own
+Active Record (and does take quite a lot of inspiration from there) to help me to understand how to debug and fix any Yii errors I get.</p>
+
+<p>When I decided to incorporate this as a separate module from that previous project the intention I had in mind was to create an Active Record model slimmer and more transparent
+to the driver than Doctrine 2. I suppose you could say I designed this to sit in the middle between the driver and Doctrine 2.</p>
+
+<h2>The Core</h2>
+
+<p>It is important to note that not all the files you see in this repository are not actually needed.</p>
+
+<p>Most of the files contained in here are actually helpers or add-ons for the main core of the ORM. The only files you really need in order to use the core of this ORM are:</p>
+
+<pre><code>/mongoglue/Server.php
+/mongoglue/Database.php
+/mongoglue/Cursor.php
+/mongoglue/Document.php
+/mongoglue/validators/Base.php
+</code></pre>
+
+<p>If you intend to use behaviours and/or validators it might be good to keep:</p>
+
+<pre><code>/mongoglue/Validator.php
+/mongoglue/Behaviour.php
+</code></pre>
+
+<p>Since these files act as parent classes that your own behaviours etc can inherit and if you end up downloading a behaviour and/or validator from other individuals they might require
+this class.</p>
+
+<p>Everything else on top is either helpers or just there to make your life a little easier. I will describe most of them here for you.</p>
+
+<h3>behaviours/Timestamp.php</h3>
+
+<p>A default behaviour you can use to add timestamps to your records. Also shows how behaviours are actually made up and designed.</p>
+
+<p>Note: This is also used by the PHPUnit tests.</p>
+
+<h3>validators/tester.php</h3>
+
+<p>A default username tester that uses Regex to test for a alpha numeric username that is 3 - 20 characters in length.</p>
+
+<p>A good example of how a validator is built.</p>
+
+<p>Note: This is also used by the PHPUnit tests.</p>
+
+<h3>tests</h3>
+
+<p>The tests folder contains a set of tests based around PHPUnit.</p>
+
+<p>This folder is invaluable to understanding how to use mongoglue and I would recommend looking through the tests performed in this folder.</p>
+
+<h3>helpers</h3>
+
+<p>Exactly what it says on the tin. This folder has its own readme to tell you what each file does.</p>
+
+<h2>Using it</h2>
+
+<p>As I said, I have designed this to quite transparent to the driver itself so lets get an example out:</p>
+
+<pre><code>require 'mongoglue/Server.php';
+
+$mongo = new mongoglue\Server(new Mongo()/new MongoClient(), array(
+    'documentDir' =&gt; dirname(__FILE__).'/mongoglue/tests/documents',
+    'documentns' =&gt; '\\mongoglue\\tests\\documents'
+));
+$db = $mongo-&gt;mydb;
+$test = $db-&gt;select('test');
+</code></pre>
+
+<p>Note: Please do not copy this block of code. There is an error in it, intentionally.</p>
+
+<p>You will see that the first file I include is the <code>Server</code> class within the <code>mongoglue</code> root. Once this file is there I cna make a new instance of it passing a connection object
+(<code>new Mongo()</code> and <code>new MongoClient()</code> both shown here) with some parameters. I should note that even though the <code>documentDir</code> is needed the <code>documentns</code> is not unless you have
+namespaced you models, then it is.</p>
+
+<p>The <code>documentDir</code> should go from the root <code>/</code> or <code>C:\</code> (or whatever drive letter you are on) depending on the OS you are on. As an example instead of passing <code>app/documents</code> as my
+<code>documentDir</code> I would actually pass <code>/srv/workspace/mydomain.co.uk/htdocs/documents</code>.</p>
+
+<p>Once you have your server class you can then use it like you would the native MongoDB driver. Accessing a <code>__get</code> on the <code>Server</code> class will get a database and accessing a <code>__get</code>
+on the returned <code>Database</code> class will get a RAW MongoDB collection (straight from the driver, no active record). In order to use Active Record you can either, as I show above,
+use the <code>select($myModelName)</code> function within the <code>Database</code> class or you cna use the <code>__call</code> to get the model, i.e. <code>$testCursor = $db-&gt;User()-&gt;find()</code>.</p>
+
+<p>When you use the <code>select</code> or <code>__call</code> abilities wthin the <code>Database</code> class both functions will return an instance of <code>\mongoglue\Document</code> which represents the document itself.</p>
+
+<h3>Using the Document</h3>
+
+<h2>Documentation notes</h2>
+
+<p>As I said earlier. A lot of the documentation and examples can be found in various files within the <code>tests</code> folder. The <code>tests</code> folder is designed to provide a set of standard
+tests with full examples of using 99% of the ORMs functionality. The file <code>document.php</code> and the models in <code>tests/documents</code> would be of particular interest to new users.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/Sammaye">Sammaye</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
