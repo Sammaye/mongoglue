@@ -237,6 +237,34 @@ notification that they have been dropped.
 
 Note: Setting the attributes and validating them are two completely different things.  
 
+### Validation
+
+#### Validators
+
+There a couple of ways to use validators. Firstly the ORM actually comes in built with a surprising number of base validators:
+
+ 
+
+#### Get Validation Errors
+
+### Setting Sanitised Attributes
+
+Note: It is NOT advised you do this. Please do not PASS GO, go straight to JAIL.
+
+When you know what you have is OK to put into the document without validation you can use the `setAttributes()` function providing it 
+with a array of properties with the key of each element being the property name:
+
+	$model->setAttributes(array('name' => 'sammaye'))
+
+### Getting the document
+
+There are couple of functions to get the document back out of the model once you have placed it in. The one to use depends upon your need:
+
+- If you only need database fields (no virtual attributes) you can use either `getDocument()` or `getRawDocument()`. The difference between the two being that `getRawDocument` returns 
+any subdocuments etc stripped of their `\mongoglue\Document` class whereas `getDocument()` does not.
+- If you need all attributes you can use `getAttributes()`. This function will currently run a `getDocument()` and then merge those results with the virtual attributes to return a 
+result
+
 ### Saving
 
 A document will and should always call the `save()` function, whether it be new or not. The `save()` function will automatically detect if the record should be inserted or updated 
@@ -249,7 +277,7 @@ into the function signature like so:
 
 	$model->save(true);	
 	
-### removing a Document
+### Removing a Document
 
 The model supports a `remove()` function which by default will deleted based on the `_id` of the document:
 
