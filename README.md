@@ -10,17 +10,63 @@ and the models in `tests/documents` would be of particular interest to new users
 
 ## The Why and How of Fry?
 
-I built this as a personal project in many respects to understand how other frameworks do Active Record. This originally started out as a project to work along side Yiis own
+I built this as a personal project to understand how other frameworks do Active Record. This originally started out as a project to work along side Yiis own
 Active Record (and does take quite a lot of inspiration from there) to help me to understand how to debug and fix any Yii errors I get.
 
 When I decided to incorporate this as a separate module from that previous project the intention I had in mind was to create an Active Record model slimmer and more transparent
 to the driver than Doctrine 2. I suppose you could say I designed this to sit in the middle between the driver and Doctrine 2.
 
+## The Core
+
+It is important to note that not all the files you see in this repository are not actually needed.
+
+Most of the files contained in here are actually helpers or add-ons for the main core of the ORM. The only files you really need in order to use the core of this ORM are:
+
+	/mongoglue/Server.php
+	/mongoglue/Database.php
+	/mongoglue/Cursor.php
+	/mongoglue/Document.php
+	/mongoglue/validators/Base.php
+
+If you intend to use behaviours and/or validators it might be good to keep:
+
+	/mongoglue/Validator.php
+	/mongoglue/Behaviour.php
+
+Since these files act as parent classes that your own behaviours etc can inherit and if you end up downloading a behaviour and/or validator from other individuals they might require
+this class.
+
+Everything else on top is either helpers or just there to make your life a little easier. I will describe most of them here for you.
+
+### behaviours/Timestamp.php
+
+A default behaviour you can use to add timestamps to your records. Also shows how behaviours are actually made up and designed.
+
+Note: This is also used by the PHPUnit tests.
+
+### validators/tester.php
+
+A default username tester that uses Regex to test for a alpha numeric username that is 3 - 20 characters in length.
+
+A good example of how a validator is built.
+
+Note: This is also used by the PHPUnit tests.
+
+### tests
+
+The tests folder contains a set of tests based around PHPUnit.
+
+This folder is invaluable to understanding how to use mongoglue and I would recommend looking through the tests performed in this folder.
+
+### helpers
+
+Exactly what it says on the tin. This folder has its own readme to tell you what each file does.
+
 ## Using it
 
 As I said, I have designed this to quite transparent to the driver itself so lets get an example out:
 
-  require 'mongoglue/Server.php';
+	require 'mongoglue/Server.php';
 
 	$mongo = new mongoglue\Server(new Mongo()/new MongoClient(), array(
 		'documentDir' => dirname(__FILE__).'/mongoglue/tests/documents',
