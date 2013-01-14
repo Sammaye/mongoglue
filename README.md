@@ -66,7 +66,7 @@ use the `select($myModelName)` function within the `Database` class or you can u
 
 When you use the `select` or `__call` abilities within the `Database` class both functions will return an instance of `\mongoglue\Document` which represents the document itself.
 
-### The Document
+## The Document
 
 A simple, bog basic document looks like this:
 
@@ -92,7 +92,7 @@ Note: if you use the server object you must also supply a database name in the `
 
 There are numerous little pieces of information and detail you can add to your model to make it do exactly what you and this is what we will be covering next.
 
-#### Fields and Virtual Attributes
+### Fields and Virtual Attributes
 
 There is no requirement to define a schema within the model.
 
@@ -118,7 +118,7 @@ You can define defaults for any of your schema fields by simply adding them to y
 
 Note: Unless you are knowledgable above this stuff it is best to stick to making all variables of the `public` scope.
 
-#### Events
+### Events
 
 The document class supports a number of events that can be used by not only you but alos other addons such as behaviours:
 
@@ -136,7 +136,7 @@ Doing the same within a `afterX()` function will not have the same effect and fu
 - `beforeDelete()` runs before the deletion of the document
 - `afterDelete()` runs after deletion of the document
 
-#### Adding behaviours
+### Adding behaviours
 
 Behaviours are really useful if you want to add a common set of functions to many models. A good example of this is actually provided, as base, within this repository.
 
