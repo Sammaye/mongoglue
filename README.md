@@ -226,8 +226,20 @@ Note: behaviours have no requirement to extend from `\mongoglue\Behaviour` provi
 Note: A behaviours event hooks into the model will be run before your own, so tghe `Timestamp`s `beforesave()` hook will run before your own in model one.
 
 
+### Checking if it is a new record
 
+There are two ways to check if the model is a new record in mongoglue, both inside the model and outside:
 
+- You can use the insert scenario using `getScenario()` to understand if it is that current scenario
+- The model actually provides a dedicated `isNew()` function which you can evaluate to either true or false directly.
+
+### Cleaning and Reloading
+
+Once every so often you might need to either clean and document or reload it completely from database because of some special case whereby active record did not work so well.
+
+The model has two functions: `clean()` and `refresh()`.
+
+The `clean` does exactly what it says on the tin however the `refresh` will run a `clean` (will actually call the `clean` function) and then replace the documents attributes.
 
 ## Finding Documents
 
@@ -245,6 +257,34 @@ Is analogous to the `findOne()` command in the MongoDB driver and will return a 
 
 This function is a special helper for `findOne`. It will take either a `MongoId` or the hexadecimal string representation of an `ObjectId` (`MongoId`) and will return the found
 document.
+
+### Searching
+
+You can use a function within each model called `search()` to search for all documents in a full text manner using regexes.
+
+The function has a signature of:
+
+	search(an_array_of_fields_to_search, a_term, an_extra_query_piece);
+	
+And can be exampled by:
+
+	$model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
+	
+Note: The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields.
+
+Note: With MongoDB 2.4 this function will become obsolete due to the new full text search abilities, use this if you are on an older version of MongoDB.
+
+Note: Please refer to the documentation page on (http://docs.mongodb.org/manual/reference/operators/#_S_regex)[$regex] where by it states: 
+
+> $regex can only use an index efficiently when the regular expression has an anchor for the beginning (i.e. ^) of a string and is a case-sensitive match. 
+> Additionally, while /^a/, /^a.*/, and /^a.*$/ match equivalent strings, they have different performance characteristics. All of these expressions use an index if 
+> an appropriate index exists; however, /^a.*/, and /^a.*$/ are slower. /^a/ can stop scanning after matching the prefix.
+
+This function uses index unfriendly regexes to perform its search. Please ensure you have something else which limits the query first i.e.:
+
+    $model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
+    
+Whereby I use the `user_id` to actually limit the query.
 
 ## Write Concern
 
