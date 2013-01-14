@@ -225,6 +225,37 @@ Note: behaviours have no requirement to extend from `\mongoglue\Behaviour` provi
 
 Note: A behaviours event hooks into the model will be run before your own, so tghe `Timestamp`s `beforesave()` hook will run before your own in model one.
 
+### Setting Unsanitised Attributes
+
+If you wish to set the attributes of the model ready for validation you can use the `_attributes()` function which will use the defined rules you either entered into the `validate()` 
+function or into the `rules()` model method to judge what fields should be set within the model and which should not. As an example:
+
+	$model->_attributes($_POST['user']);
+
+Fields sent into this function that are not defined within the rules of the model (either through the `validate` or `rules` function) will be silently dropped. There will be no 
+notification that they have been dropped.
+
+Note: Setting the attributes and validating them are two completely different things.  
+
+### Saving
+
+A document will and should always call the `save()` function, whether it be new or not. The `save()` function will automatically detect if the record should be inserted or updated 
+and will peform the needed action. An example of using `save` is:
+
+	$model->save();
+	
+Note: By default validation is NOT set to run on everytime you call save. If you wish to run the models validation when you save you must pass `true` in as an additional parameter 
+into the function signature like so:
+
+	$model->save(true);	
+	
+### removing a Document
+
+The model supports a `remove()` function which by default will deleted based on the `_id` of the document:
+
+	$model->remove();
+
+Note: Currently the `primaryKey` function has no effect on how the remove function removes a document.
 
 ### Checking if it is a new record
 
@@ -285,6 +316,14 @@ This function uses index unfriendly regexes to perform its search. Please ensure
     $model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
     
 Whereby I use the `user_id` to actually limit the query.
+
+## Aggregation Framework
+
+Mongoglue does not support the aggregation framework as such (aggregation and active record never goes well together) but it does have a helper with which to do aggregation on the model:
+
+	$model->aggregate(array(//whatever))
+	
+It is basically a helper that ppoints directly to the drivers own `aggregate` function so it works exactly the same.
 
 ## Write Concern
 
