@@ -2,7 +2,7 @@
 
 This is a very simple ORM designed for MongoDB.
 
-It is very much designed as a kind of (http://www.fisher-price.com/en_US/products/55197)[Fisher-Price] "My First Active Record". Irrespective of that fact this ORM has 
+It is very much designed as a kind of [Fisher-Price](http://www.fisher-price.com/en_US/products/55197) "My First Active Record". Irrespective of that fact this ORM has 
 been extensively tested in a live environment (as part of another project) and has been found to be quite fitting to most security needs.
 
 A lot of the documentation and examples can be found within the `tests` folder where PHPUnit tests are performed on each section of the ORM. The file `document.php`
@@ -333,7 +333,7 @@ Note: The search is very primative. It does not detect ranking nor relavance, me
 
 Note: With MongoDB 2.4 this function will become obsolete due to the new full text search abilities, use this if you are on an older version of MongoDB.
 
-Note: Please refer to the documentation page on (http://docs.mongodb.org/manual/reference/operators/#_S_regex)[$regex] where by it states: 
+Note: Please refer to the documentation page on [$regex](http://docs.mongodb.org/manual/reference/operators/#_S_regex) where by it states: 
 
 > $regex can only use an index efficiently when the regular expression has an anchor for the beginning (i.e. ^) of a string and is a case-sensitive match. 
 > Additionally, while /^a/, /^a.*/, and /^a.*$/ match equivalent strings, they have different performance characteristics. All of these expressions use an index if 
