@@ -118,6 +118,24 @@ You can define defaults for any of your schema fields by simply adding them to y
 
 Note: Unless you are knowledgable above this stuff it is best to stick to making all variables of the `public` scope.
 
+#### Events
+
+The document class supports a number of events that can be used by not only you but alos other addons such as behaviours:
+
+If you return false from a `beforeX()` function, such as `beforeValidate()`, it will actually halt current processing stop further action within the model.
+
+Doing the same within a `afterX()` function will not have the same effect and further processing will continue regardless. 
+
+- `afterConstruct()` is quite self explanatory really, it runs after the class constructor but before setting attributes in the model
+- `beforeFind()` run as the first thing before finding a document
+- `afterFind()` runs as the last thing after finding a document
+- `beforeValidate()` runs prior to validaton of the model
+- `afterValidate()` runs after validation of the model
+- `beforesave()` runs before the save of a document, whether it be insert or update (take heed of that last sentence when adding functionality there)
+- `aftersave()` run after the save of a document, again, whether it be an insert or an update
+- `beforeDelete()` runs before the deletion of the document
+- `afterDelete()` runs after deletion of the document
+
 #### Adding behaviours
 
 Behaviours are really useful if you want to add a common set of functions to many models. A good example of this is actually provided, as base, within this repository.
