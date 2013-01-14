@@ -177,6 +177,16 @@ As seen from the examples above you can set a variety of different options on a 
 It should be noted that the relational behaviour can support either a single `ObjectId` or a `DBRef` or an array of `OjbectId`s as the key for what information use from the parent 
 model to gather the children. As example, from the above code, `test_ids` is in fact an array of `ObjectId`s that denote all the `testDetail`s that are connected to this model.
 
+The realtions of the model can be accessed as either variables of the class (i.e. `$model->testDetail`) or using the `with()` function. The `with()` function provides the ability for you 
+to add a relation and then later down the line specify the `where` parameter of the relation depending upon a dynamic set of variables within your application, a good example being:
+
+	$model->with('testdetail', array('name' => $nameOfInterest));
+	
+Using `with` this way will not overwrite the cached relation at the variable position in the class, instead it will make a whole new query to the database to retrieve this information 
+specially for this case.
+	
+Note: If you provide a `where` clause within the `with` function it will in fact merge with the `where` clause already existing within the delcared relation in the model. 
+
 Note: Automatic Cascading is not supported by default within the ORM
 
 Note: MongoDB has no JOINs or relational integrity what-so-ever so you will need to take into account cascading etc on the application end.
