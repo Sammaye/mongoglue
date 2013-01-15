@@ -462,6 +462,8 @@ any subdocuments etc stripped of their `\mongoglue\Document` class whereas `getD
 - If you need all attributes you can use `getAttributes()`. This function currently runs `getDocument()` and then merge those results with the virtual attributes to return a
 result
 
+You can get both the BSON encoded and the JSON encoded version of the raw document by using `getBSONDocument()` or alternatively `getJSONDocument()`.
+
 ### Saving
 
 A document will and should always call the `save()` function, whether it be new or not. The `save()` function will automatically detect if the record should be inserted or updated
