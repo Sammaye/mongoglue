@@ -588,11 +588,11 @@ You can use a function within each model called `search()` to search for all doc
 
 The function has a signature of:
 
-  search(an_array_of_fields_to_search, a_term, an_extra_query_piece);
+   search(an_array_of_fields_to_search, a_term, an_extra_query_piece);
 
 And can be exampled by:
 
-  $model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
+   $model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
 
 Note: The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields.
 
