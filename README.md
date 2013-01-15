@@ -649,3 +649,11 @@ You can also set the write concern per query, taking the previous example:
 
 As I said earlier. A lot of the documentation and examples can be found in various files within the `tests` folder. The `tests` folder is designed to provide a set of standard
 tests with full examples of using 99% of the ORMs functionality. The file `document.php` and the models in `tests/documents` would be of particular interest to new users.
+
+## Known Flaws
+
+- mongoglue does not support field selectivity at the moment 
+- mongoglue does not support [covered queries](http://docs.mongodb.org/manual/applications/indexes/#create-indexes-that-support-covered-queries)
+- mongoglue cannot eager load relationships for models for use with in-memory sorting on the application end
+
+And probably more but that's what I could think of immediately. 
