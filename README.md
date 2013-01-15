@@ -625,8 +625,7 @@ and will peform the needed action. An example of using `save` is:
 	<tbody>
 		<tr><td>Note:</td><td>By default validation is NOT set to run on everytime you call save. If you wish to run the models validation when you save you must pass `true` in as an additional parameter
 into the function signature like so:
-<pre><code>
-	$model->save(true);</code></pre></td></tr>
+<pre><code>$model->save(true);</code></pre></td></tr>
 	</tbody>
 </table>
 
@@ -703,9 +702,7 @@ And can be exampled by:
 
 This function uses index unfriendly regexes to perform its search. Please ensure you have something else which limits the query first i.e.:
 
-<pre><code>
-    $model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
-</code></pre>
+<pre><code>$model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));</code></pre>
 
 Whereby I use the `user_id` to actually limit the query.</td></tr>
 	</tbody>
