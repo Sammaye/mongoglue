@@ -239,6 +239,33 @@ Note: Setting the attributes and validating them are two completely different th
 
 ### Validation
 
+Model validation is defined in two ways defined by calling the `validate()` function within the model. The function runs all rules defined, either adhoc within the `validate()`
+function signature or within the models `rules` function, and return a response denoting whether or not the model is valid (`true` if it is).
+
+An example of using the models rules functions:
+
+	function rules(){
+		return array(
+			array('name', 'string', 'allowEmpty' => false, 'message' => 'You must fill in a god damn name')
+		);
+	}
+
+And an example of using the validation adhoc within the `validate()` function:
+
+	$valid = $user->validate($data, array(
+		array('name', 'string', 'allowEmpty' => false, 'min' => 3, 'message' => 'You must have a username of 3 or more alpha numeric characters')
+	));
+
+The validators do not provide their own error messaging as such you must provide a `message` parameter in the rule if you wish it to report on an error.
+
+#### Scenarios
+
+The model rules support the model scenarios as well to ensure that only certain validation runs on certain events.
+
+A scenario based rule can be defined by defining a `on` parameter for the rule (in no particular place) with the value of the key being that of the scenario name.
+
+By default, adding no `on` clause to the rule will in fact make the rule run on all scenarios.
+
 #### Validators
 
 It is good to understand that mongoglue comes built in with some basic validators:
@@ -305,6 +332,20 @@ Note: Even though errors (providing you know what your doing) can be set from th
 Note: You must return a `boolean` of success or failure for each validator
 
 #### Validation Errors
+
+Once the model has been validated there might be errors.
+
+To retrieve any errors in the model you can use `getErrors()` or `getFirstError()`.
+
+##### getErrors()
+
+This function returns either all errors in the model, or if a field was provided as the parameter (i.e. `$model->getErrors('name')`) will get all errors for that field.
+
+##### getFirstError()
+
+Exactly the same as above except it will get the first error from the field. It will get the first global error is not field is defined.
+
+Note: `validate` also returns a `boolean` on whether the model validated or not, `true` to denote it did and `false` respectively.
 
 ### Setting Sanitised Attributes
 
