@@ -146,8 +146,12 @@ As an example if we wanted to set two indexes on the `user` collection, one for 
 		)
 	)
 
-Note: the indexes files for mongoglue is very basic and only really to place a standard set of indexes on a single database. It is by no means required and if not present
-mongoglue will just not look for it again on that thread.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>the indexes files for mongoglue is very basic and only really to place a standard set of indexes on a single database. It is by no means required and if not present
+mongoglue will just not look for it again on that thread.</td></tr>
+	</tbody>
+</table>
 
 ## The Document
 
@@ -171,9 +175,13 @@ All documents must extend `\mongoglue\Document` and implement the `model` functi
 Here I provide a collection name and a model function. The model function, like in Yii, allows you to access the model from almost anywhere almost immediately by only supplying a
 `\mongoglue\Database` object or alternatively a `\mongoglue\Server` object.
 
-Note: if you use the server object you must also supply a database name in the `$dbname` parameter.
-
 There are numerous little pieces of information and detail you can add to your model to make it do exactly what you and this is what we will be covering next.
+
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>if you use the server object you must also supply a database name in the `$dbname` parameter.</td></tr>
+	</tbody>
+</table>
 
 ### Fields and Virtual Attributes
 
@@ -199,7 +207,11 @@ You can define defaults for any of your schema fields by simply adding them to y
 
   	}
 
-Note: Unless you are knowledgable above this stuff it is best to stick to making all variables of the `public` scope.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>Unless you are knowledgable above this stuff it is best to stick to making all variables of the `public` scope.</td></tr>
+	</tbody>
+</table>
 
 ### Events
 
@@ -268,11 +280,23 @@ to add a relation and then later down the line specify the `where` parameter of 
 Using `with` this way will not overwrite the cached relation at the variable position in the class, instead it will make a whole new query to the database to retrieve this information
 specially for this case.
 
-Note: If you provide a `where` clause within the `with` function it will in fact merge with the `where` clause already existing within the delcared relation in the model.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>If you provide a `where` clause within the `with` function it will in fact merge with the `where` clause already existing within the delcared relation in the model.</td></tr>
+	</tbody>
+</table>
 
-Note: Automatic Cascading is not supported by default within the ORM
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>Automatic Cascading is not supported by default within the ORM</td></tr>
+	</tbody>
+</table>
 
-Note: MongoDB has no JOINs or relational integrity what-so-ever so you will need to take into account cascading etc on the application end.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>MongoDB has no JOINs or relational integrity what-so-ever so you will need to take into account cascading etc on the application end.</td></tr>
+	</tbody>
+</table>
 
 ### Behaviours
 
@@ -304,9 +328,17 @@ like so:
 
 The keys within the nested array whose key is the behaviour name represent class properties.
 
-Note: behaviours have no requirement to extend from `\mongoglue\Behaviour` provided you have the functions in your own file as well.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>behaviours have no requirement to extend from `\mongoglue\Behaviour` provided you have the functions in your own file as well.</td></tr>
+	</tbody>
+</table>
 
-Note: A behaviours event hooks into the model will be run before your own, so tghe `Timestamp`s `beforesave()` hook will run before your own in model one.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>A behaviours event hooks into the model will be run before your own, so tghe `Timestamp`s `beforesave()` hook will run before your own in model one.</td></tr>
+	</tbody>
+</table>
 
 ### Setting Unsanitised Attributes
 
@@ -318,7 +350,11 @@ function or into the `rules()` model method to judge what fields should be set w
 Fields sent into this function that are not defined within the rules of the model (either through the `validate` or `rules` function) will be silently dropped. There will be no
 notification that they have been dropped.
 
-Note: Setting the attributes and validating them are two completely different things.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>Setting the attributes and validating them are two completely different things.</td></tr>
+	</tbody>
+</table>
 
 ### Validation
 
@@ -367,7 +403,11 @@ It is good to understand that mongoglue comes built in with some basic validator
 - `email` ensures that the value is a valid email
 - `safe` just denotes the field should run no validation at all and should just be passed across (not a good thing to use)
 
-Note: the email validator uses the PHP filter ( http://php.net/manual/en/filter.filters.validate.php )
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>the email validator uses the PHP filter ( http://php.net/manual/en/filter.filters.validate.php )</td></tr>
+	</tbody>
+</table>
 
 You can add you own validators either in a behaviour, model or a custom validator file.
 
@@ -410,9 +450,17 @@ A helper `isEmpty` is provided to quickly detect if the field is provided as emp
 
 The owner (model) of the validator can be called by accessing the `$owner` property of the class. This provides you with full access to the parent model of the validator.
 
-Note: Even though errors (providing you know what your doing) can be set from the validation functions/classes it is recommended not to
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>Even though errors (providing you know what your doing) can be set from the validation functions/classes it is recommended not to</td></tr>
+	</tbody>
+</table>
 
-Note: You must return a `boolean` of success or failure for each validator
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>You must return a `boolean` of success or failure for each validator</td></tr>
+	</tbody>
+</table>
 
 #### Embedding
 
@@ -439,7 +487,11 @@ To embed a classed object (i.e. `testEmbed`) you simply state the type of embedd
 To embed an array you state the embed type and then a set of rules. These rules will run separately to the root model and will act as though the root model is being validated all over
 again but for this subdocument. This means that technically you can put in any rule you want, if you wished even another embed rule.
 
-Note: There are no advanced control features for subdocument validation assignment like `$push` etc instead this behaviour must be done manually.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>There are no advanced control features for subdocument validation assignment like `$push` etc instead this behaviour must be done manually.</td></tr>
+	</tbody>
+</table>
 
 ##### Design Considerations
 
@@ -514,8 +566,12 @@ just embed a set of fields exactly like the document however if the embedding ty
 					array
 						0 => string 'You must enter a post code' (length=26)
 
-Note: The order of the document indexing within `embedMany` subdocuments is dependant upon how to assign it. If this comes from a `$_POST` then it will be in the same order as they are
-displayed in your form.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>The order of the document indexing within `embedMany` subdocuments is dependant upon how to assign it. If this comes from a `$_POST` then it will be in the same order as they are
+displayed in your form</td></tr>
+	</tbody>
+</table>
 
 ##### getErrors()
 
@@ -525,11 +581,19 @@ This function returns either all errors in the model, or if a field was provided
 
 Exactly the same as above except it will get the first error from the field. It will get the first global error is not field is defined.
 
-Note: `validate` also returns a `boolean` on whether the model validated or not, `true` to denote it did and `false` respectively.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>`validate` also returns a `boolean` on whether the model validated or not, `true` to denote it did and `false` respectively.</td></tr>
+	</tbody>
+</table>
 
 ### Setting Sanitised Attributes
 
-Note: It is NOT advised you do this. Please do not PASS GO, go straight to JAIL.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>It is NOT advised you do this from a `$_POST` or other user entered data. Please do not PASS GO, go straight to JAIL.</td></tr>
+	</tbody>
+</table>
 
 When you know what you have is OK to put into the document without validation you can use the `setAttributes()` function providing it
 with a array of properties with the key of each element being the property name:
@@ -554,10 +618,14 @@ and will peform the needed action. An example of using `save` is:
 
 	$model->save();
 
-Note: By default validation is NOT set to run on everytime you call save. If you wish to run the models validation when you save you must pass `true` in as an additional parameter
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>By default validation is NOT set to run on everytime you call save. If you wish to run the models validation when you save you must pass `true` in as an additional parameter
 into the function signature like so:
 
-	$model->save(true);
+	$model->save(true);</td></tr>
+	</tbody>
+</table>
 
 ### Removing a Document
 
@@ -565,7 +633,11 @@ The model supports a `remove()` function which by default will deleted based on 
 
 	$model->remove();
 
-Note: Currently the `primaryKey` function has no effect on how the remove function removes a document.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>Currently the `primaryKey` function has no effect on how the remove function removes a document.</td></tr>
+	</tbody>
+</table>
 
 ### Checking if it is a new record
 
@@ -610,12 +682,17 @@ The function has a signature of:
 And can be exampled by:
 
 	$model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
+	
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields. 
+		With MongoDB 2.4 this function will become obsolete due to the new full text search abilities, use this if you are on an older version of MongoDB.</td></tr>
+	</tbody>
+</table>
 
-Note: The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields.
-
-Note: With MongoDB 2.4 this function will become obsolete due to the new full text search abilities, use this if you are on an older version of MongoDB.
-
-Note: Please refer to the documentation page on [$regex](http://docs.mongodb.org/manual/reference/operators/#_S_regex) where by it states:
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>Please refer to the documentation page on [$regex](http://docs.mongodb.org/manual/reference/operators/#_S_regex) where by it states:
 
 > $regex can only use an index efficiently when the regular expression has an anchor for the beginning (i.e. ^) of a string and is a case-sensitive match.
 > Additionally, while /^a/, /^a.*/, and /^a.*$/ match equivalent strings, they have different performance characteristics. All of these expressions use an index if
@@ -625,7 +702,9 @@ This function uses index unfriendly regexes to perform its search. Please ensure
 
     $model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
 
-Whereby I use the `user_id` to actually limit the query.
+Whereby I use the `user_id` to actually limit the query.</td></tr>
+	</tbody>
+</table>
 
 ## The Cursor
 
@@ -641,7 +720,11 @@ The first parameter being an array of the query and the second being a string of
 
 It is, of course, easier to normally just call it straight from the model via `$model->find()`.
 
-Note: There is no eager load option on the cursor
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>There is no eager load option on the cursor</td></tr>
+	</tbody>
+</table>
 
 ## Aggregation Framework
 
