@@ -573,11 +573,11 @@ The document class acts as way to both find and save a record using active recor
 
 Is analogous to the `find()` command in the MongoDB driver and will return a `\mongoglue\Cursor` of results.
 
-  $db->select('test')->findOne()
+	$db->select('test')->findOne()
 
 Is analogous to the `findOne()` command in the MongoDB driver and will return a `\mongoglue\Document` of the found document.
 
-  $db->select('test')->findById();
+	$db->select('test')->findById();
 
 This function is a special helper for `findOne`. It will take either a `MongoId` or the hexadecimal string representation of an `ObjectId` (`MongoId`) and will return the found
 document.
@@ -588,11 +588,11 @@ You can use a function within each model called `search()` to search for all doc
 
 The function has a signature of:
 
-   search(an_array_of_fields_to_search, a_term, an_extra_query_piece);
+	search(an_array_of_fields_to_search, a_term, an_extra_query_piece);
 
 And can be exampled by:
 
-   $model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
+	$model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
 
 Note: The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields.
 
