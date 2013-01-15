@@ -24,16 +24,16 @@ Most of the files contained in here are actually helpers or add-ons for the main
 
 The core only really consists of:
 
-	/mongoglue/Server.php
-	/mongoglue/Database.php
-	/mongoglue/Cursor.php
-	/mongoglue/Document.php
-	/mongoglue/validators/Base.php
+  /mongoglue/Server.php
+  /mongoglue/Database.php
+  /mongoglue/Cursor.php
+  /mongoglue/Document.php
+  /mongoglue/validators/Base.php
 
 If you intend to use behaviours and/or validators it might be good to keep:
 
-	/mongoglue/Validator.php
-	/mongoglue/Behaviour.php
+  /mongoglue/Validator.php
+  /mongoglue/Behaviour.php
 
 And their respective folders as `behaviours` and `validators`. The files listed above act as parent classes that your own behaviours etc can inherit and if you end up
 downloading a behaviour and/or validator from other individuals they might require these classes.
@@ -44,14 +44,14 @@ Everything else on top is either helpers or just there to make your life a littl
 
 As I said, I have designed this to be quite transparent to the driver itself so lets get an example out:
 
-	require 'mongoglue/Server.php';
+  require 'mongoglue/Server.php';
 
-	$mongo = new mongoglue\Server(new MongoClient(), array(
-		'documentDir' => dirname(__FILE__).'/mongoglue/tests/documents',
-		'documentns' => '\\mongoglue\\tests\\documents'
-	));
-	$db = $mongo->mydb;
-	$test = $db->select('test');
+  $mongo = new mongoglue\Server(new MongoClient(), array(
+    'documentDir' => dirname(__FILE__).'/mongoglue/tests/documents',
+    'documentns' => '\\mongoglue\\tests\\documents'
+  ));
+  $db = $mongo->mydb;
+  $test = $db->select('test');
 
 You will see that the first file I include is the `Server` class within the `mongoglue` root. Once this file is there I can make a new instance of it passing a connection object
 (`new Mongo()` and `new MongoClient()` both shown here) with some parameters. I should note that even though the `documentDir` is needed the `documentns` is not unless you have
@@ -66,22 +66,88 @@ use the `select($myModelName)` function within the `Database` class or you can u
 
 When you use the `select` or `__call` abilities within the `Database` class both functions will return an instance of `\mongoglue\Document` which represents the document itself.
 
+## The Server
+
+The server class is merely a wrapper for the whole ORM, it includes certain functions that woluld be best persisted across the models.
+
+Some of the stuff it persists is virtual and document field caches to stop the models from having to do reflection each time they are spun up limiting the amount of resources spent
+on the intensive task.
+
+The server does have one other function too. As you have notice you shoved a connection object (whether it be `Mongo()` or `MongoClient()`) into the first parameter of the server
+construct. This is because the server class also allows for pooling of multiple connections to multiple areas of your environment.
+
+It provides helper functions for switching between connections and changing how models will save their data.
+
+To provide an example of connection switching in mongoglue here is a snippet:
+
+	$mongo = new mongoglue\Server(new Mongo(), array(
+		'documentDir' => dirname(__FILE__).'/mongoglue/tests/documents',
+		'documentns' => '\\mongoglue\\tests\\documents'
+	));
+
+	// Lists all connections stored in the class
+	$mongo->getConnectionList();
+
+	// We add a connection, but the connection is not active here
+	$mongo->addConnection('myBlogConnection', new MongoClient());
+
+	// Now we set the connection
+	$mongo->setConnection('myBlogConnection');
+
+	// Now we remove that connection
+	$mongo->removeConnection('myBlogConnection');
+
+	// Now we reset the connection to default
+	$mongo->setConnection('default');
+
+Note: the server class is referenced to all of its database and model classes which means that changing the connection on the server class has an effect on all the other classes you
+use that reference that server object.
+
+Note: Connections will not "reset" themselves after a single operation, the connection will persist as the new master connection until it is either removed or switched out.
+
+Note: the connection you first put into the constructor of the server class will be labelled as the `default` connection and will persist in the connections array with such a label.
+
+Note: the `selectCollection` function has been deprecated in mongoglue on the server class. Unlike the driver I have decided to go with a full deprecation of this function since it
+was a blurring of roles. The server should deal with selecting databases not collections.
+
+## The Database
+
+The database class is dirt simple and is merely a wrapper for `MongoDB` ( http://php.net/manual/en/class.mongodb.php ) and implements very little on top.
+
+One of the little things it does implement on top is a remodelled `selectCollection` function which can now load and use a indexes file. The indexes will apply to both active record
+and non-active record actions commited through mongoglue.
+
+You can find the `Indexes.php` file within the root of the mongoglue directory. Within it you will see some examples already placed. The format of it is basically: *An array
+with keys of the names of collections with an array of arrays of index configurations*
+
+As an example if we wanted to set two indexes on the `user` collection, one for unique email and another non-unique for username:
+
+	array(
+		'user' => array(
+			array(array('email' => 1), array('unique' => true)),
+			array(array('username' => 1)),
+		)
+	)
+
+Note: the indexes files for mongoglue is very basic and only really to place a standard set of indexes on a single database. It is by no means required and if not present
+mongoglue will just not look for it again on that thread.
+
 ## The Document
 
 A simple, bog basic document looks like this:
 
-	namespace mongoglue\tests\documents;
+  namespace mongoglue\tests\documents;
 
-	class test extends \mongoglue\Document{
+  class test extends \mongoglue\Document{
 
-		function collectionName(){
-			return 'test';
-		}
+    function collectionName(){
+      return 'test';
+    }
 
-		public static function model($mongo, $dbname = null, $class = __CLASS__){
-			return parent::model($mongo, $dbname, $class);
-		}
-	}
+    public static function model($mongo, $dbname = null, $class = __CLASS__){
+      return parent::model($mongo, $dbname, $class);
+    }
+  }
 
 All documents must extend `\mongoglue\Document` and implement the `model` function.
 
@@ -98,23 +164,23 @@ There is no requirement to define a schema within the model.
 
 By default every variable within the model is declared a database attribute however there are ways to define virtual attributes:
 
-	class test extends \mongoglue\Document{
+  class test extends \mongoglue\Document{
 
-		/** @virtual */
-		public $lastRunEvent;
+    /** @virtual */
+    public $lastRunEvent;
 
-	}
+  }
 
 Using the `@virtual` annotation in PHP Doc blocks you can actually assign virtual attributes to your model that will not be saved but can be treated like any other document variable,
 i.e. they can be validated.
 
 You can define defaults for any of your schema fields by simply adding them to your class and, in PHP, just assign a default within the class definition:
 
-	class test extends \mongoglue\Document{
+  class test extends \mongoglue\Document{
 
-		public $lastRunEvent = 'None';
+    public $lastRunEvent = 'None';
 
-	}
+  }
 
 Note: Unless you are knowledgable above this stuff it is best to stick to making all variables of the `public` scope.
 
@@ -144,10 +210,10 @@ By default a new model will have a scenairo of `insert` and a saved model will h
 
 Getters and setters are provided for the scenarios as part of the models public API:
 
-	function beforesave(){
-		$scenario = $this->getScenario();
-		$this->setScenario($scenario);
-	}
+  function beforesave(){
+    $scenario = $this->getScenario();
+    $this->setScenario($scenario);
+  }
 
 ### Relations
 
@@ -155,16 +221,16 @@ Relations are vey useful if you intend to have a relational model of some kind.
 
 You can define a set of relations via the `relations` function within the model:
 
-	function relations(){
-		return array(
-			'testDetail' => array('one', 'testDetail', 'test_id'),
-			'testDetails' => array('many', 'testDetail', 'test_id'),
-			'embeddedDetails' => array('many', 'testDetail', '_id', 'on' => 'test_ids'),
-			'conditionalDetails' => array('many', 'testDetail', 'test_id', 'where' => array(
-				'name' => 'Programming'
-			))
-		);
-	}
+  function relations(){
+    return array(
+      'testDetail' => array('one', 'testDetail', 'test_id'),
+      'testDetails' => array('many', 'testDetail', 'test_id'),
+      'embeddedDetails' => array('many', 'testDetail', '_id', 'on' => 'test_ids'),
+      'conditionalDetails' => array('many', 'testDetail', 'test_id', 'where' => array(
+        'name' => 'Programming'
+      ))
+    );
+  }
 
 As seen from the examples above you can set a variety of different options on a relation however the relation can only consist of:
 
@@ -180,7 +246,7 @@ model to gather the children. As example, from the above code, `test_ids` is in 
 The realtions of the model can be accessed as either variables of the class (i.e. `$model->testDetail`) or using the `with()` function. The `with()` function provides the ability for you
 to add a relation and then later down the line specify the `where` parameter of the relation depending upon a dynamic set of variables within your application, a good example being:
 
-	$model->with('testdetail', array('name' => $nameOfInterest));
+  $model->with('testdetail', array('name' => $nameOfInterest));
 
 Using `with` this way will not overwrite the cached relation at the variable position in the class, instead it will make a whole new query to the database to retrieve this information
 specially for this case.
@@ -202,22 +268,22 @@ For an idea of what events the behaviour can implement look to the parent class 
 
 A model can transpose the functions within the behaviour onto itself allowing you, in this case, to call something like:
 
-	$model->ago($model->created);
+  $model->ago($model->created);
 
 To get a user fiendly caption for how long ago the record was created.
 
 Behavours within the model sit within a function called `behaviours()` which returns an array of behaviours. As an example:
 
-	function behaviours(){
-		return array('Timestamp');
-	}
+  function behaviours(){
+    return array('Timestamp');
+  }
 
 A behaviour can also be passed certain information by the model to tell it how it should run. This is done within the behaviour declaration within the models `behaviours` function
 like so:
 
-	function behaviours(){
-		return array('Timestamp' => array('dateFormat' => 0));
-	}
+  function behaviours(){
+    return array('Timestamp' => array('dateFormat' => 0));
+  }
 
 The keys within the nested array whose key is the behaviour name represent class properties.
 
@@ -230,7 +296,7 @@ Note: A behaviours event hooks into the model will be run before your own, so tg
 If you wish to set the attributes of the model ready for validation you can use the `_attributes()` function which will use the defined rules you either entered into the `validate()`
 function or into the `rules()` model method to judge what fields should be set within the model and which should not. As an example:
 
-	$model->_attributes($_POST['user']);
+  $model->_attributes($_POST['user']);
 
 Fields sent into this function that are not defined within the rules of the model (either through the `validate` or `rules` function) will be silently dropped. There will be no
 notification that they have been dropped.
@@ -244,17 +310,17 @@ function signature or within the models `rules` function, and return a response 
 
 An example of using the models rules functions:
 
-	function rules(){
-		return array(
-			array('name', 'string', 'allowEmpty' => false, 'message' => 'You must fill in a god damn name')
-		);
-	}
+  function rules(){
+    return array(
+      array('name', 'string', 'allowEmpty' => false, 'message' => 'You must fill in a god damn name')
+    );
+  }
 
 And an example of using the validation adhoc within the `validate()` function:
 
-	$valid = $user->validate($data, array(
-		array('name', 'string', 'allowEmpty' => false, 'min' => 3, 'message' => 'You must have a username of 3 or more alpha numeric characters')
-	));
+  $valid = $user->validate($data, array(
+    array('name', 'string', 'allowEmpty' => false, 'min' => 3, 'message' => 'You must have a username of 3 or more alpha numeric characters')
+  ));
 
 The validators do not provide their own error messaging as such you must provide a `message` parameter in the rule if you wish it to report on an error.
 
@@ -290,13 +356,13 @@ You can add you own validators either in a behaviour, model or a custom validato
 
 Adding a validator within a behaviour or model is the same, just create a function in the class:
 
-	function myval($field, $value, $params){
-		return true;
-	}
+  function myval($field, $value, $params){
+    return true;
+  }
 
 And then reference that within the rules:
 
-	array('myfield', 'myval', //Any params);
+  array('myfield', 'myval', //Any params);
 
 When the validation function runs to detect if the function exists it will be able to run it and return a response.
 
@@ -304,18 +370,18 @@ As well as adding validators this way you can add your own class based validator
 
 namespace mongoglue\validators;
 
-	class tester extends \mongoglue\Validator{
-		function validate($attribute, $value){
-			// The regex basically says that if the name is less than 20 alpha numeric characters but 3+ then allow it
-			// Of course you don't need a dedicated validator for this you can just use the regex validator but this is being used
-			// for unit testing
-			if(preg_match('/^[0-9a-zA-Z]{3,20}$/', $value) > 0){
-				return true;
-			}else{
-				return false;
-			}
-		}
-	}
+  class tester extends \mongoglue\Validator{
+    function validate($attribute, $value){
+      // The regex basically says that if the name is less than 20 alpha numeric characters but 3+ then allow it
+      // Of course you don't need a dedicated validator for this you can just use the regex validator but this is being used
+      // for unit testing
+      if(preg_match('/^[0-9a-zA-Z]{3,20}$/', $value) > 0){
+        return true;
+      }else{
+        return false;
+      }
+    }
+  }
 
 Whereby the `validate` function is the default run function whenever the validator is called which, just like the model/behaviour based validators, should return a `boolean` of success
 or failure.
@@ -335,16 +401,16 @@ Note: You must return a `boolean` of success or failure for each validator
 
 You can embed documents within your root document to be validated at the same time.
 
-	$valid = $user->validate($data, array(
-		array('embedObjects', 'embedMany', 'testEmbed'),
+  $valid = $user->validate($data, array(
+    array('embedObjects', 'embedMany', 'testEmbed'),
 
-		array('address', 'embedMany', 'rules' => array(
-			array('road', 'string', 'allowEmpty' => false, 'message' => 'You must enter a road name'),
-			array('town', 'string', 'allowEmpty' => false, 'message' => 'You must enter a town name'),
-			array('county', 'string', 'allowEmpty' => false, 'message' => 'You must enter a county name'),
-			array('postal_code', 'string', 'allowEmpty' => false, 'message' => 'You must enter a post code')
-		))
-	));
+    array('address', 'embedMany', 'rules' => array(
+      array('road', 'string', 'allowEmpty' => false, 'message' => 'You must enter a road name'),
+      array('town', 'string', 'allowEmpty' => false, 'message' => 'You must enter a town name'),
+      array('county', 'string', 'allowEmpty' => false, 'message' => 'You must enter a county name'),
+      array('postal_code', 'string', 'allowEmpty' => false, 'message' => 'You must enter a post code')
+    ))
+  ));
 
 The example above shows two methods of embedding: class based and pure array based.
 
@@ -376,60 +442,60 @@ To retrieve any errors in the model you can use `getErrors()` or `getFirstError(
 
 The errors are returned as an associative array of fields with each field having a sub array of error messages:
 
-	array
-	  'name' =>
-	    array
-	      0 => string 'That username already exists please try another.' (length=48)
-	  'embedObjects' =>
-	    array
-	      0 =>
-	        array
-	          'name' =>
-	            array
-	              ...
-	  'address' =>
-	    array
-	      0 =>
-	        array
-	          'road' =>
-	            array
-	              ...
-	          'postal_code' =>
-	            array
-	              ...
-	      1 =>
-	        array
-	          'county' =>
-	            array
-	              ...
-	      2 =>
-	        array
-	          'postal_code' =>
-	            array
-	              ...
+  array
+    'name' =>
+      array
+        0 => string 'That username already exists please try another.' (length=48)
+    'embedObjects' =>
+      array
+        0 =>
+          array
+            'name' =>
+              array
+                ...
+    'address' =>
+      array
+        0 =>
+          array
+            'road' =>
+              array
+                ...
+            'postal_code' =>
+              array
+                ...
+        1 =>
+          array
+            'county' =>
+              array
+                ...
+        2 =>
+          array
+            'postal_code' =>
+              array
+                ...
 
 The `embedObjects` and `address` fields represent subdocuments that have received errors. The format of these errors is depedant upon the embedding type. If it is `embedOne` it will
 just embed a set of fields exactly like the document however if the embedding type is `embedMany` then it will have a `0` indexed array of nested documents with their errors:
 
-	array
-	  0 =>
-	    array
-	      'road' =>
-	        array
-	          0 => string 'You must enter a road name' (length=26)
-	      'postal_code' =>
-	        array
-	          0 => string 'You must enter a post code' (length=26)
-	  1 =>
-	    array
-	      'county' =>
-	        array
-	          0 => string 'You must enter a county name' (length=28)
-	  2 =>
-	    array
-	      'postal_code' =>
-	        array
-	          0 => string 'You must enter a post code' (length=26)
+  array
+    0 =>
+      array
+        'road' =>
+          array
+            0 => string 'You must enter a road name' (length=26)
+        'postal_code' =>
+          array
+            0 => string 'You must enter a post code' (length=26)
+    1 =>
+      array
+        'county' =>
+          array
+            0 => string 'You must enter a county name' (length=28)
+    2 =>
+      array
+        'postal_code' =>
+          array
+            0 => string 'You must enter a post code' (length=26)
 
 Note: The order of the document indexing within `embedMany` subdocuments is dependant upon how to assign it. If this comes from a `$_POST` then it will be in the same order as they are
 displayed in your form.
@@ -451,7 +517,7 @@ Note: It is NOT advised you do this. Please do not PASS GO, go straight to JAIL.
 When you know what you have is OK to put into the document without validation you can use the `setAttributes()` function providing it
 with a array of properties with the key of each element being the property name:
 
-	$model->setAttributes(array('name' => 'sammaye'))
+  $model->setAttributes(array('name' => 'sammaye'))
 
 ### Getting the document
 
@@ -469,18 +535,18 @@ You can get both the BSON encoded and the JSON encoded version of the raw docume
 A document will and should always call the `save()` function, whether it be new or not. The `save()` function will automatically detect if the record should be inserted or updated
 and will peform the needed action. An example of using `save` is:
 
-	$model->save();
+  $model->save();
 
 Note: By default validation is NOT set to run on everytime you call save. If you wish to run the models validation when you save you must pass `true` in as an additional parameter
 into the function signature like so:
 
-	$model->save(true);
+  $model->save(true);
 
 ### Removing a Document
 
 The model supports a `remove()` function which by default will deleted based on the `_id` of the document:
 
-	$model->remove();
+  $model->remove();
 
 Note: Currently the `primaryKey` function has no effect on how the remove function removes a document.
 
@@ -507,11 +573,11 @@ The document class acts as way to both find and save a record using active recor
 
 Is analogous to the `find()` command in the MongoDB driver and will return a `\mongoglue\Cursor` of results.
 
-	$db->select('test')->findOne()
+  $db->select('test')->findOne()
 
 Is analogous to the `findOne()` command in the MongoDB driver and will return a `\mongoglue\Document` of the found document.
 
-	$db->select('test')->findById();
+  $db->select('test')->findById();
 
 This function is a special helper for `findOne`. It will take either a `MongoId` or the hexadecimal string representation of an `ObjectId` (`MongoId`) and will return the found
 document.
@@ -522,11 +588,11 @@ You can use a function within each model called `search()` to search for all doc
 
 The function has a signature of:
 
-	search(an_array_of_fields_to_search, a_term, an_extra_query_piece);
+  search(an_array_of_fields_to_search, a_term, an_extra_query_piece);
 
 And can be exampled by:
 
-	$model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
+  $model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
 
 Note: The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields.
 
@@ -544,24 +610,28 @@ This function uses index unfriendly regexes to perform its search. Please ensure
 
 Whereby I use the `user_id` to actually limit the query.
 
+
+
+## The Cursor
+
 ## Aggregation Framework
 
 Mongoglue does not support the aggregation framework as such (aggregation and active record never goes well together) but it does have a helper with which to do aggregation on the model:
 
-	$model->aggregate(array(//whatever))
+  $model->aggregate(array(//whatever))
 
-It is basically a helper that ppoints directly to the drivers own `aggregate` function so it works exactly the same.
+It is basically a helper that points directly to the drivers own `aggregate` function so it works exactly the same.
 
 ## Write Concern
 
 The default write concern for mongoglue is `1` ( http://php.net/manual/en/mongo.writeconcerns.php ) with journal ack off. You can change these defaults using:
 
-	$mongo->writeConcern = 'majority';
-	$mongo->journaled = true;
+  $mongo->writeConcern = 'majority';
+  $mongo->journaled = true;
 
 You can also set the write concern per query, taking the previous example:
 
-	$db->select('user')->setAttributes(array('name' => 'sammaye'))->save(array('w' => 'majority', 'j' => true));
+  $db->select('user')->setAttributes(array('name' => 'sammaye'))->save(array('w' => 'majority', 'j' => true));
 
 ## Documentation notes
 
