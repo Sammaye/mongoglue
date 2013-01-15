@@ -331,11 +331,108 @@ Note: Even though errors (providing you know what your doing) can be set from th
 
 Note: You must return a `boolean` of success or failure for each validator
 
+#### Embedding
+
+You can embed documents within your root document to be validated at the same time.
+
+	$valid = $user->validate($data, array(
+		array('embedObjects', 'embedMany', 'testEmbed'),
+
+		array('address', 'embedMany', 'rules' => array(
+			array('road', 'string', 'allowEmpty' => false, 'message' => 'You must enter a road name'),
+			array('town', 'string', 'allowEmpty' => false, 'message' => 'You must enter a town name'),
+			array('county', 'string', 'allowEmpty' => false, 'message' => 'You must enter a county name'),
+			array('postal_code', 'string', 'allowEmpty' => false, 'message' => 'You must enter a post code')
+		))
+	));
+
+The example above shows two methods of embedding: class based and pure array based.
+
+There are two embedding type avaiable: `embedOne` and `embedMany`. The `embedOne` will just create a sub array of properties while the `embedMany` will create an array of arrays of
+properties.
+
+To embed a classed object (i.e. `testEmbed`) you simply state the type of embedding and them the class name.
+
+To embed an array you state the embed type and then a set of rules. These rules will run separately to the root model and will act as though the root model is being validated all over
+again but for this subdocument. This means that technically you can put in any rule you want, if you wished even another embed rule.
+
+Note: There are no advanced control features for subdocument validation assignment like `$push` etc instead this behaviour must be done manually.
+
+##### Design Considerations
+
+Even though it is perfectly supported and allowed within the ORM to embed object classes and multi-level embed it is not always considered good database or application design.
+
+Embedding many classed objects and many validation rules many levels can cause a huge recursion which can have a detrimental effect on the speed and memory usage of your application.
+Aside from that classed subdocuments are normally an "iffy" area due to the fact that they normal represent separate entities (i.e. `comments` embedded into a `post`).
+
+Please consider carefully about embedding and if in doubt either ask Stackoverflow ( http://www.stackoverflow.com ) or the `mongodb-user`
+( https://groups.google.com/forum/?fromgroups=#!forum/mongodb-user ) Google Group.
+
 #### Validation Errors
 
 Once the model has been validated there might be errors.
 
 To retrieve any errors in the model you can use `getErrors()` or `getFirstError()`.
+
+The errors are returned as an associative array of fields with each field having a sub array of error messages:
+
+	array
+	  'name' =>
+	    array
+	      0 => string 'That username already exists please try another.' (length=48)
+	  'embedObjects' =>
+	    array
+	      0 =>
+	        array
+	          'name' =>
+	            array
+	              ...
+	  'address' =>
+	    array
+	      0 =>
+	        array
+	          'road' =>
+	            array
+	              ...
+	          'postal_code' =>
+	            array
+	              ...
+	      1 =>
+	        array
+	          'county' =>
+	            array
+	              ...
+	      2 =>
+	        array
+	          'postal_code' =>
+	            array
+	              ...
+
+The `embedObjects` and `address` fields represent subdocuments that have received errors. The format of these errors is depedant upon the embedding type. If it is `embedOne` it will
+just embed a set of fields exactly like the document however if the embedding type is `embedMany` then it will have a `0` indexed array of nested documents with their errors:
+
+	array
+	  0 =>
+	    array
+	      'road' =>
+	        array
+	          0 => string 'You must enter a road name' (length=26)
+	      'postal_code' =>
+	        array
+	          0 => string 'You must enter a post code' (length=26)
+	  1 =>
+	    array
+	      'county' =>
+	        array
+	          0 => string 'You must enter a county name' (length=28)
+	  2 =>
+	    array
+	      'postal_code' =>
+	        array
+	          0 => string 'You must enter a post code' (length=26)
+
+Note: The order of the document indexing within `embedMany` subdocuments is dependant upon how to assign it. If this comes from a `$_POST` then it will be in the same order as they are
+displayed in your form.
 
 ##### getErrors()
 
