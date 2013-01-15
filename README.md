@@ -293,6 +293,13 @@ namespace mongoglue\validators;
 Whereby the `validate` function is the default run function whenever the validator is called which, just like the model/behaviour based validators, should return a `boolean` of success
 or failure.
 
+You are not required to extend the `\mongoglue\Validator` class but it does provide some base functionality that the framework does use, however it is easy enough to place within your
+own validator.
+
+A helper `isEmpty` is provided to quickly detect if the field is provided as empty.
+
+The owner (model) of the validator can be called by accessing the `$owner` property of the class. This provides you with full access to the parent model of the validator.
+
 Note: Even though errors (providing you know what your doing) can be set from the validation functions/classes it is recommended not to
 
 Note: You must return a `boolean` of success or failure for each validator
@@ -314,7 +321,7 @@ There are couple of functions to get the document back out of the model once you
 
 - If you only need database fields (no virtual attributes) you can use either `getDocument()` or `getRawDocument()`. The difference between the two being that `getRawDocument` returns
 any subdocuments etc stripped of their `\mongoglue\Document` class whereas `getDocument()` does not.
-- If you need all attributes you can use `getAttributes()`. This function will currently run a `getDocument()` and then merge those results with the virtual attributes to return a
+- If you need all attributes you can use `getAttributes()`. This function currently runs `getDocument()` and then merge those results with the virtual attributes to return a
 result
 
 ### Saving
