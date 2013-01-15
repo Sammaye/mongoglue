@@ -535,18 +535,18 @@ You can get both the BSON encoded and the JSON encoded version of the raw docume
 A document will and should always call the `save()` function, whether it be new or not. The `save()` function will automatically detect if the record should be inserted or updated
 and will peform the needed action. An example of using `save` is:
 
-  $model->save();
+	$model->save();
 
 Note: By default validation is NOT set to run on everytime you call save. If you wish to run the models validation when you save you must pass `true` in as an additional parameter
 into the function signature like so:
 
-  $model->save(true);
+	$model->save(true);
 
 ### Removing a Document
 
 The model supports a `remove()` function which by default will deleted based on the `_id` of the document:
 
-  $model->remove();
+	$model->remove();
 
 Note: Currently the `primaryKey` function has no effect on how the remove function removes a document.
 
