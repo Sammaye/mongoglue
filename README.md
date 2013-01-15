@@ -2,15 +2,15 @@
 
 This is a very simple ORM designed for MongoDB.
 
-It is very much designed as a kind of [Fisher-Price](http://www.fisher-price.com/en_US/products/55197) "My First Active Record". Irrespective of that fact this ORM has 
+It is very much designed as a kind of [Fisher-Price](http://www.fisher-price.com/en_US/products/55197) "My First Active Record". Irrespective of that fact this ORM has
 been extensively tested in a live environment (as part of another project) and has been found to be quite fitting to most security needs.
 
 A lot of the documentation and examples can be found within the `tests` folder where PHPUnit tests are performed on each section of the ORM. The file `document.php`
 and the models in `tests/documents` would be of particular interest to new users.
 
-## The Why and How of Fry?
+## The Why of Fry?
 
-I built this as a personal project to understand how other frameworks do Active Record. This ORM in fact comes from a MVC framework I built myself to learn how frameworks such as Yii, 
+I built this as a personal project to understand how other frameworks do Active Record. This ORM in fact comes from a MVC framework I built myself to learn how frameworks such as Yii,
 Lithium and CakePHP (etc) actually work.
 
 When I decided to incorporate this as a separate module from that previous project the intention I had in mind was to create an Active Record model slimmer and more transparent
@@ -20,7 +20,7 @@ to the driver than Doctrine 2. I suppose you could say I designed this to sit in
 
 It is important to note that not all the files you see in this repository are actually needed.
 
-Most of the files contained in here are actually helpers or add-ons for the main core of the ORM. 
+Most of the files contained in here are actually helpers or add-ons for the main core of the ORM.
 
 The core only really consists of:
 
@@ -34,8 +34,8 @@ If you intend to use behaviours and/or validators it might be good to keep:
 
 	/mongoglue/Validator.php
 	/mongoglue/Behaviour.php
-	
-And their respective folders as `behaviours` and `validators`. The files listed above act as parent classes that your own behaviours etc can inherit and if you end up 
+
+And their respective folders as `behaviours` and `validators`. The files listed above act as parent classes that your own behaviours etc can inherit and if you end up
 downloading a behaviour and/or validator from other individuals they might require these classes.
 
 Everything else on top is either helpers or just there to make your life a little easier.
@@ -71,21 +71,21 @@ When you use the `select` or `__call` abilities within the `Database` class both
 A simple, bog basic document looks like this:
 
 	namespace mongoglue\tests\documents;
-	
+
 	class test extends \mongoglue\Document{
-	
+
 		function collectionName(){
 			return 'test';
 		}
-	
+
 		public static function model($mongo, $dbname = null, $class = __CLASS__){
 			return parent::model($mongo, $dbname, $class);
 		}
 	}
-	
+
 All documents must extend `\mongoglue\Document` and implement the `model` function.
-	
-Here I provide a collection name and a model function. The model function, like in Yii, allows you to access the model from almost anywhere almost immediately by only supplying a 
+
+Here I provide a collection name and a model function. The model function, like in Yii, allows you to access the model from almost anywhere almost immediately by only supplying a
 `\mongoglue\Database` object or alternatively a `\mongoglue\Server` object.
 
 Note: if you use the server object you must also supply a database name in the `$dbname` parameter.
@@ -99,21 +99,21 @@ There is no requirement to define a schema within the model.
 By default every variable within the model is declared a database attribute however there are ways to define virtual attributes:
 
 	class test extends \mongoglue\Document{
-	
+
 		/** @virtual */
 		public $lastRunEvent;
-		
+
 	}
-	
-Using the `@virtual` annotation in PHP Doc blocks you can actually assign virtual attributes to your model that will not be saved but can be treated like any other document variable, 
+
+Using the `@virtual` annotation in PHP Doc blocks you can actually assign virtual attributes to your model that will not be saved but can be treated like any other document variable,
 i.e. they can be validated.
 
 You can define defaults for any of your schema fields by simply adding them to your class and, in PHP, just assign a default within the class definition:
 
 	class test extends \mongoglue\Document{
-	
+
 		public $lastRunEvent = 'None';
-		
+
 	}
 
 Note: Unless you are knowledgable above this stuff it is best to stick to making all variables of the `public` scope.
@@ -124,7 +124,7 @@ The document class supports a number of events that can be used by not only you 
 
 If you return false from a `beforeX()` function, such as `beforeValidate()`, it will actually halt current processing stop further action within the model.
 
-Doing the same within a `afterX()` function will not have the same effect and further processing will continue regardless. 
+Doing the same within a `afterX()` function will not have the same effect and further processing will continue regardless.
 
 - `afterConstruct()` is quite self explanatory really, it runs after the class constructor but before setting attributes in the model
 - `beforeFind()` run as the first thing before finding a document
@@ -165,7 +165,7 @@ You can define a set of relations via the `relations` function within the model:
 			))
 		);
 	}
-	
+
 As seen from the examples above you can set a variety of different options on a relation however the relation can only consist of:
 
 - A type as the first array position, `one` or `many`
@@ -174,18 +174,18 @@ As seen from the examples above you can set a variety of different options on a 
 - A `on` clause, incase the `_id` is not the foreign key
 - A `where` clause to limit a relation
 
-It should be noted that the relational behaviour can support either a single `ObjectId` or a `DBRef` or an array of `OjbectId`s as the key for what information use from the parent 
+It should be noted that the relational behaviour can support either a single `ObjectId` or a `DBRef` or an array of `OjbectId`s as the key for what information use from the parent
 model to gather the children. As example, from the above code, `test_ids` is in fact an array of `ObjectId`s that denote all the `testDetail`s that are connected to this model.
 
-The realtions of the model can be accessed as either variables of the class (i.e. `$model->testDetail`) or using the `with()` function. The `with()` function provides the ability for you 
+The realtions of the model can be accessed as either variables of the class (i.e. `$model->testDetail`) or using the `with()` function. The `with()` function provides the ability for you
 to add a relation and then later down the line specify the `where` parameter of the relation depending upon a dynamic set of variables within your application, a good example being:
 
 	$model->with('testdetail', array('name' => $nameOfInterest));
-	
-Using `with` this way will not overwrite the cached relation at the variable position in the class, instead it will make a whole new query to the database to retrieve this information 
+
+Using `with` this way will not overwrite the cached relation at the variable position in the class, instead it will make a whole new query to the database to retrieve this information
 specially for this case.
-	
-Note: If you provide a `where` clause within the `with` function it will in fact merge with the `where` clause already existing within the delcared relation in the model. 
+
+Note: If you provide a `where` clause within the `with` function it will in fact merge with the `where` clause already existing within the delcared relation in the model.
 
 Note: Automatic Cascading is not supported by default within the ORM
 
@@ -195,7 +195,7 @@ Note: MongoDB has no JOINs or relational integrity what-so-ever so you will need
 
 Behaviours are really useful if you want to add a common set of functions to many models. A good example of this is actually provided, as base, within this repository.
 
-The `Timestamp.php` file in the `behaviours` folder shows a pefect example of how common functionality can exist between many models. As you can see it hooks into `beforeSave` and 
+The `Timestamp.php` file in the `behaviours` folder shows a pefect example of how common functionality can exist between many models. As you can see it hooks into `beforeSave` and
 implements a couple of helper functions.
 
 For an idea of what events the behaviour can implement look to the parent class in `\mongoglue\Behaviour`.
@@ -203,7 +203,7 @@ For an idea of what events the behaviour can implement look to the parent class 
 A model can transpose the functions within the behaviour onto itself allowing you, in this case, to call something like:
 
 	$model->ago($model->created);
-	
+
 To get a user fiendly caption for how long ago the record was created.
 
 Behavours within the model sit within a function called `behaviours()` which returns an array of behaviours. As an example:
@@ -211,47 +211,99 @@ Behavours within the model sit within a function called `behaviours()` which ret
 	function behaviours(){
 		return array('Timestamp');
 	}
-	
-A behaviour can also be passed certain information by the model to tell it how it should run. This is done within the behaviour declaration within the models `behaviours` function 
+
+A behaviour can also be passed certain information by the model to tell it how it should run. This is done within the behaviour declaration within the models `behaviours` function
 like so:
 
 	function behaviours(){
 		return array('Timestamp' => array('dateFormat' => 0));
 	}
-	
+
 The keys within the nested array whose key is the behaviour name represent class properties.
 
-Note: behaviours have no requirement to extend from `\mongoglue\Behaviour` provided you have the functions in your own file as well. 
+Note: behaviours have no requirement to extend from `\mongoglue\Behaviour` provided you have the functions in your own file as well.
 
 Note: A behaviours event hooks into the model will be run before your own, so tghe `Timestamp`s `beforesave()` hook will run before your own in model one.
 
 ### Setting Unsanitised Attributes
 
-If you wish to set the attributes of the model ready for validation you can use the `_attributes()` function which will use the defined rules you either entered into the `validate()` 
+If you wish to set the attributes of the model ready for validation you can use the `_attributes()` function which will use the defined rules you either entered into the `validate()`
 function or into the `rules()` model method to judge what fields should be set within the model and which should not. As an example:
 
 	$model->_attributes($_POST['user']);
 
-Fields sent into this function that are not defined within the rules of the model (either through the `validate` or `rules` function) will be silently dropped. There will be no 
+Fields sent into this function that are not defined within the rules of the model (either through the `validate` or `rules` function) will be silently dropped. There will be no
 notification that they have been dropped.
 
-Note: Setting the attributes and validating them are two completely different things.  
+Note: Setting the attributes and validating them are two completely different things.
 
 ### Validation
 
 #### Validators
 
-There a couple of ways to use validators. Firstly the ORM actually comes in built with a surprising number of base validators:
+It is good to understand that mongoglue comes built in with some basic validators:
 
- 
+- `required` makes sure a value for the field is required
+- `boolean` ensures a value is of type boolean
+- `string` ensures a value of type string
+- `objExist` can be used to ensure another object, defined by a condition, exists or not
+- `in` ensures the value is in a range of other values
+- `nin` ensures the values is not in a range of other values
+- `regex` ensures the value either complies or does not comply to the regex inserted into the rule
+- `compare` compares a value using specifically defined opreators (`=`,`<=`,`<`,`>`,`>=`,`!=`) whether or not the fields value compares with either a static value or a field
+- `number` ensures the value is a number
+- `url` ensures the value is a URL
+- `tokenized` ensures that the value is tokenized (will normally return true) but more importantly will ensure that there is not more than `x` tokenized elements in the string
+- `email` ensures that the value is a valid email
+- `safe` just denotes the field should run no validation at all and should just be passed across (not a good thing to use)
 
-#### Get Validation Errors
+Note: the email validator uses the PHP filter ( http://php.net/manual/en/filter.filters.validate.php )
+
+You can add you own validators either in a behaviour, model or a custom validator file.
+
+Adding a validator within a behaviour or model is the same, just create a function in the class:
+
+	function myval($field, $value, $params){
+		return true;
+	}
+
+And then reference that within the rules:
+
+	array('myfield', 'myval', //Any params);
+
+When the validation function runs to detect if the function exists it will be able to run it and return a response.
+
+As well as adding validators this way you can add your own class based validator (or some one elses) within the `/mongoglue/validators` folder. A basic validator setup is:
+
+namespace mongoglue\validators;
+
+	class tester extends \mongoglue\Validator{
+		function validate($attribute, $value){
+			// The regex basically says that if the name is less than 20 alpha numeric characters but 3+ then allow it
+			// Of course you don't need a dedicated validator for this you can just use the regex validator but this is being used
+			// for unit testing
+			if(preg_match('/^[0-9a-zA-Z]{3,20}$/', $value) > 0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+
+Whereby the `validate` function is the default run function whenever the validator is called which, just like the model/behaviour based validators, should return a `boolean` of success
+or failure.
+
+Note: Even though errors (providing you know what your doing) can be set from the validation functions/classes it is recommended not to
+
+Note: You must return a `boolean` of success or failure for each validator
+
+#### Validation Errors
 
 ### Setting Sanitised Attributes
 
 Note: It is NOT advised you do this. Please do not PASS GO, go straight to JAIL.
 
-When you know what you have is OK to put into the document without validation you can use the `setAttributes()` function providing it 
+When you know what you have is OK to put into the document without validation you can use the `setAttributes()` function providing it
 with a array of properties with the key of each element being the property name:
 
 	$model->setAttributes(array('name' => 'sammaye'))
@@ -260,23 +312,23 @@ with a array of properties with the key of each element being the property name:
 
 There are couple of functions to get the document back out of the model once you have placed it in. The one to use depends upon your need:
 
-- If you only need database fields (no virtual attributes) you can use either `getDocument()` or `getRawDocument()`. The difference between the two being that `getRawDocument` returns 
+- If you only need database fields (no virtual attributes) you can use either `getDocument()` or `getRawDocument()`. The difference between the two being that `getRawDocument` returns
 any subdocuments etc stripped of their `\mongoglue\Document` class whereas `getDocument()` does not.
-- If you need all attributes you can use `getAttributes()`. This function will currently run a `getDocument()` and then merge those results with the virtual attributes to return a 
+- If you need all attributes you can use `getAttributes()`. This function will currently run a `getDocument()` and then merge those results with the virtual attributes to return a
 result
 
 ### Saving
 
-A document will and should always call the `save()` function, whether it be new or not. The `save()` function will automatically detect if the record should be inserted or updated 
+A document will and should always call the `save()` function, whether it be new or not. The `save()` function will automatically detect if the record should be inserted or updated
 and will peform the needed action. An example of using `save` is:
 
 	$model->save();
-	
-Note: By default validation is NOT set to run on everytime you call save. If you wish to run the models validation when you save you must pass `true` in as an additional parameter 
+
+Note: By default validation is NOT set to run on everytime you call save. If you wish to run the models validation when you save you must pass `true` in as an additional parameter
 into the function signature like so:
 
-	$model->save(true);	
-	
+	$model->save(true);
+
 ### Removing a Document
 
 The model supports a `remove()` function which by default will deleted based on the `_id` of the document:
@@ -324,25 +376,25 @@ You can use a function within each model called `search()` to search for all doc
 The function has a signature of:
 
 	search(an_array_of_fields_to_search, a_term, an_extra_query_piece);
-	
+
 And can be exampled by:
 
 	$model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
-	
+
 Note: The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields.
 
 Note: With MongoDB 2.4 this function will become obsolete due to the new full text search abilities, use this if you are on an older version of MongoDB.
 
-Note: Please refer to the documentation page on [$regex](http://docs.mongodb.org/manual/reference/operators/#_S_regex) where by it states: 
+Note: Please refer to the documentation page on [$regex](http://docs.mongodb.org/manual/reference/operators/#_S_regex) where by it states:
 
-> $regex can only use an index efficiently when the regular expression has an anchor for the beginning (i.e. ^) of a string and is a case-sensitive match. 
-> Additionally, while /^a/, /^a.*/, and /^a.*$/ match equivalent strings, they have different performance characteristics. All of these expressions use an index if 
+> $regex can only use an index efficiently when the regular expression has an anchor for the beginning (i.e. ^) of a string and is a case-sensitive match.
+> Additionally, while /^a/, /^a.*/, and /^a.*$/ match equivalent strings, they have different performance characteristics. All of these expressions use an index if
 > an appropriate index exists; however, /^a.*/, and /^a.*$/ are slower. /^a/ can stop scanning after matching the prefix.
 
 This function uses index unfriendly regexes to perform its search. Please ensure you have something else which limits the query first i.e.:
 
     $model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
-    
+
 Whereby I use the `user_id` to actually limit the query.
 
 ## Aggregation Framework
@@ -350,7 +402,7 @@ Whereby I use the `user_id` to actually limit the query.
 Mongoglue does not support the aggregation framework as such (aggregation and active record never goes well together) but it does have a helper with which to do aggregation on the model:
 
 	$model->aggregate(array(//whatever))
-	
+
 It is basically a helper that ppoints directly to the drivers own `aggregate` function so it works exactly the same.
 
 ## Write Concern
