@@ -108,12 +108,24 @@ use that reference that server object.</td></tr>
 	</tbody>
 </table>
 
-Note: Connections will not "reset" themselves after a single operation, the connection will persist as the new master connection until it is either removed or switched out.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>Connections will not "reset" themselves after a single operation, the connection will persist as the new master connection until it is either removed or switched out.</td></tr>
+	</tbody>
+</table>
 
-Note: the connection you first put into the constructor of the server class will be labelled as the `default` connection and will persist in the connections array with such a label.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>the connection you first put into the constructor of the server class will be labelled as the `default` connection and will persist in the connections array with such a label.</td></tr>
+	</tbody>
+</table>
 
-Note: the `selectCollection` function has been deprecated in mongoglue on the server class. Unlike the driver I have decided to go with a full deprecation of this function since it
-was a blurring of roles. The server should deal with selecting databases not collections.
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>the `selectCollection` function has been deprecated in mongoglue on the server class. Unlike the driver I have decided to go with a full deprecation of this function since it
+was a blurring of roles. The server should deal with selecting databases not collections.</td></tr>
+	</tbody>
+</table>
 
 ## The Database
 
