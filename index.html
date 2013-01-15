@@ -4,53 +4,66 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Mongoglue by Sammaye</title>
-
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
   </head>
   <body>
-    <div class="wrapper">
+
       <header>
         <h1>Mongoglue</h1>
         <p>Another MongoDB ORM</p>
-
-        <p class="view"><a href="https://github.com/Sammaye/mongoglue">View the Project on GitHub <small>Sammaye/mongoglue</small></a></p>
-
-
-        <ul>
-          <li><a href="https://github.com/Sammaye/mongoglue/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/Sammaye/mongoglue/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/Sammaye/mongoglue">View On <strong>GitHub</strong></a></li>
-        </ul>
       </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/Sammaye/mongoglue" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/Sammaye/mongoglue/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/Sammaye/mongoglue/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
       <section>
         <h1>Mongoglue ORM</h1>
 
 <p>This is a very simple ORM designed for MongoDB.</p>
 
-<p>It is very much designed a kind of "My First" of Active Record handling. Irrespective of that fact this ORM has been extensively tested in a live environment and has been
-found to be quite fitting to security needs in all tested cases.</p>
+<p>It is very much designed as a kind of <a href="http://www.fisher-price.com/en_US/products/55197">Fisher-Price</a> "My First Active Record". Irrespective of that fact this ORM has
+been extensively tested in a live environment (as part of another project) and has been found to be quite fitting to most security needs.</p>
 
 <p>A lot of the documentation and examples can be found within the <code>tests</code> folder where PHPUnit tests are performed on each section of the ORM. The file <code>document.php</code>
 and the models in <code>tests/documents</code> would be of particular interest to new users.</p>
 
-<h2>The Why and How of Fry?</h2>
+<h2>The Why of Fry?</h2>
 
-<p>I built this as a personal project to understand how other frameworks do Active Record. This originally started out as a project to work along side Yiis own
-Active Record (and does take quite a lot of inspiration from there) to help me to understand how to debug and fix any Yii errors I get.</p>
+<p>I built this as a personal project to understand how other frameworks do Active Record. This ORM in fact comes from a MVC framework I built myself to learn how frameworks such as Yii,
+Lithium and CakePHP (etc) actually work.</p>
 
 <p>When I decided to incorporate this as a separate module from that previous project the intention I had in mind was to create an Active Record model slimmer and more transparent
-to the driver than Doctrine 2. I suppose you could say I designed this to sit in the middle between the driver and Doctrine 2.</p>
+to the driver than Doctrine 2. I suppose you could say I designed this to sit in the middle area between the driver and Doctrine 2 in terms of usage.</p>
 
 <h2>The Core</h2>
 
-<p>It is important to note that not all the files you see in this repository are not actually needed.</p>
+<p>It is important to note that not all the files you see in this repository are actually needed.</p>
 
-<p>Most of the files contained in here are actually helpers or add-ons for the main core of the ORM. The only files you really need in order to use the core of this ORM are:</p>
+<p>Most of the files contained in here are actually helpers or add-ons for the main core of the ORM.</p>
+
+<p>The core only really consists of:</p>
 
 <pre><code>/mongoglue/Server.php
 /mongoglue/Database.php
@@ -65,42 +78,18 @@ to the driver than Doctrine 2. I suppose you could say I designed this to sit in
 /mongoglue/Behaviour.php
 </code></pre>
 
-<p>Since these files act as parent classes that your own behaviours etc can inherit and if you end up downloading a behaviour and/or validator from other individuals they might require
-this class.</p>
+<p>And their respective folders as <code>behaviours</code> and <code>validators</code>. The files listed above act as parent classes that your own behaviours etc can inherit and if you end up
+downloading a behaviour and/or validator from other individuals they might require these classes.</p>
 
-<p>Everything else on top is either helpers or just there to make your life a little easier. I will describe most of them here for you.</p>
-
-<h3>behaviours/Timestamp.php</h3>
-
-<p>A default behaviour you can use to add timestamps to your records. Also shows how behaviours are actually made up and designed.</p>
-
-<p>Note: This is also used by the PHPUnit tests.</p>
-
-<h3>validators/tester.php</h3>
-
-<p>A default username tester that uses Regex to test for a alpha numeric username that is 3 - 20 characters in length.</p>
-
-<p>A good example of how a validator is built.</p>
-
-<p>Note: This is also used by the PHPUnit tests.</p>
-
-<h3>tests</h3>
-
-<p>The tests folder contains a set of tests based around PHPUnit.</p>
-
-<p>This folder is invaluable to understanding how to use mongoglue and I would recommend looking through the tests performed in this folder.</p>
-
-<h3>helpers</h3>
-
-<p>Exactly what it says on the tin. This folder has its own readme to tell you what each file does.</p>
+<p>Everything else on top is either helpers or just there to make your life a little easier.</p>
 
 <h2>Using it</h2>
 
-<p>As I said, I have designed this to quite transparent to the driver itself so lets get an example out:</p>
+<p>As I said, I have designed this to be quite transparent to the driver itself so lets get an example out:</p>
 
 <pre><code>require 'mongoglue/Server.php';
 
-$mongo = new mongoglue\Server(new Mongo()/new MongoClient(), array(
+$mongo = new mongoglue\Server(new MongoClient(), array(
     'documentDir' =&gt; dirname(__FILE__).'/mongoglue/tests/documents',
     'documentns' =&gt; '\\mongoglue\\tests\\documents'
 ));
@@ -108,34 +97,702 @@ $db = $mongo-&gt;mydb;
 $test = $db-&gt;select('test');
 </code></pre>
 
-<p>Note: Please do not copy this block of code. There is an error in it, intentionally.</p>
-
-<p>You will see that the first file I include is the <code>Server</code> class within the <code>mongoglue</code> root. Once this file is there I cna make a new instance of it passing a connection object
+<p>You will see that the first file I include is the <code>Server</code> class within the <code>mongoglue</code> root. Once this file is there I can make a new instance of it passing a connection object
 (<code>new Mongo()</code> and <code>new MongoClient()</code> both shown here) with some parameters. I should note that even though the <code>documentDir</code> is needed the <code>documentns</code> is not unless you have
 namespaced you models, then it is.</p>
 
-<p>The <code>documentDir</code> should go from the root <code>/</code> or <code>C:\</code> (or whatever drive letter you are on) depending on the OS you are on. As an example instead of passing <code>app/documents</code> as my
+<p>The <code>documentDir</code> should go from the root <code>/</code> or <code>C:\</code> (or whatever drive letter you are on) depending on the OS you are on. As an example, instead of passing <code>app/documents</code> as my
 <code>documentDir</code> I would actually pass <code>/srv/workspace/mydomain.co.uk/htdocs/documents</code>.</p>
 
 <p>Once you have your server class you can then use it like you would the native MongoDB driver. Accessing a <code>__get</code> on the <code>Server</code> class will get a database and accessing a <code>__get</code>
 on the returned <code>Database</code> class will get a RAW MongoDB collection (straight from the driver, no active record). In order to use Active Record you can either, as I show above,
-use the <code>select($myModelName)</code> function within the <code>Database</code> class or you cna use the <code>__call</code> to get the model, i.e. <code>$testCursor = $db-&gt;User()-&gt;find()</code>.</p>
+use the <code>select($myModelName)</code> function within the <code>Database</code> class or you can use the <code>__call</code> to get the model, i.e. <code>$testCursor = $db-&gt;User()-&gt;find()</code>.</p>
 
-<p>When you use the <code>select</code> or <code>__call</code> abilities wthin the <code>Database</code> class both functions will return an instance of <code>\mongoglue\Document</code> which represents the document itself.</p>
+<p>When you use the <code>select</code> or <code>__call</code> abilities within the <code>Database</code> class both functions will return an instance of <code>\mongoglue\Document</code> which represents the document itself.</p>
 
-<h3>Using the Document</h3>
+<h2>The Server</h2>
+
+<p>The server class is merely a wrapper for the whole ORM, it includes certain functions that woluld be best persisted across the models.</p>
+
+<p>Some of the stuff it persists is virtual and document field caches to stop the models from having to do reflection each time they are spun up limiting the amount of resources spent
+on the intensive task.</p>
+
+<p>The server does have one other function too. As you have notice you shoved a connection object (whether it be <code>Mongo()</code> or <code>MongoClient()</code>) into the first parameter of the server
+construct. This is because the server class also allows for pooling of multiple connections to multiple areas of your environment.</p>
+
+<p>It provides helper functions for switching between connections and changing how models will save their data.</p>
+
+<p>To provide an example of connection switching in mongoglue here is a snippet:</p>
+
+<pre><code>$mongo = new mongoglue\Server(new Mongo(), array(
+    'documentDir' =&gt; dirname(__FILE__).'/mongoglue/tests/documents',
+    'documentns' =&gt; '\\mongoglue\\tests\\documents'
+));
+
+// Lists all connections stored in the class
+$mongo-&gt;getConnectionList();
+
+// We add a connection, but the connection is not active here
+$mongo-&gt;addConnection('myBlogConnection', new MongoClient());
+
+// Now we set the connection
+$mongo-&gt;setConnection('myBlogConnection');
+
+// Now we remove that connection
+$mongo-&gt;removeConnection('myBlogConnection');
+
+// Now we reset the connection to default
+$mongo-&gt;setConnection('default');
+</code></pre>
+
+<table><tr>
+<td>Note:</td>
+<td>the server class is referenced to all of its database and model classes which means that changing the connection on the server class has an effect on all the other classes you
+use that reference that server object.</td>
+</tr></table><table><tr>
+<td>Note:</td>
+<td>Connections will not "reset" themselves after a single operation, the connection will persist as the new master connection until it is either removed or switched out.</td>
+</tr></table><table><tr>
+<td>Note:</td>
+<td>the connection you first put into the constructor of the server class will be labelled as the <code>default</code> connection and will persist in the connections array with such a label.</td>
+</tr></table><table><tr>
+<td>Note:</td>
+<td>the <code>selectCollection</code> function has been deprecated in mongoglue on the server class. Unlike the driver I have decided to go with a full deprecation of this function since it
+was a blurring of roles. The server should deal with selecting databases not collections.</td>
+</tr></table><h2>The Database</h2>
+
+<p>The database class is dirt simple and is merely a wrapper for <code>MongoDB</code> ( <a href="http://php.net/manual/en/class.mongodb.php">http://php.net/manual/en/class.mongodb.php</a> ) and implements very little on top.</p>
+
+<p>One of the little things it does implement on top is a remodelled <code>selectCollection</code> function which can now load and use a indexes file. The indexes will apply to both active record
+and non-active record actions commited through mongoglue.</p>
+
+<p>You can find the <code>Indexes.php</code> file within the root of the mongoglue directory. Within it you will see some examples already placed. The format of it is basically: <em>An array
+with keys of the names of collections with an array of arrays of index configurations</em></p>
+
+<p>As an example if we wanted to set two indexes on the <code>user</code> collection, one for unique email and another non-unique for username:</p>
+
+<pre><code>array(
+    'user' =&gt; array(
+        array(array('email' =&gt; 1), array('unique' =&gt; true)),
+        array(array('username' =&gt; 1)),
+    )
+)
+</code></pre>
+
+<table><tr>
+<td>Note:</td>
+<td>the indexes files for mongoglue is very basic and only really to place a standard set of indexes on a single database. It is by no means required and if not present
+mongoglue will just not look for it again on that thread.</td>
+</tr></table><h2>The Document</h2>
+
+<p>A simple, bog basic document looks like this:</p>
+
+<pre><code>namespace mongoglue\tests\documents;
+
+class test extends \mongoglue\Document{
+
+    function collectionName(){
+        return 'test';
+    }
+
+    public static function model($mongo, $dbname = null, $class = __CLASS__){
+        return parent::model($mongo, $dbname, $class);
+    }
+}
+</code></pre>
+
+<p>All documents must extend <code>\mongoglue\Document</code> and implement the <code>model</code> function.</p>
+
+<p>Here I provide a collection name and a model function. The model function, like in Yii, allows you to access the model from almost anywhere almost immediately by only supplying a
+<code>\mongoglue\Database</code> object or alternatively a <code>\mongoglue\Server</code> object.</p>
+
+<p>There are numerous little pieces of information and detail you can add to your model to make it do exactly what you and this is what we will be covering next.</p>
+
+<table><tr>
+<td>Note:</td>
+<td>if you use the server object you must also supply a database name in the <code>$dbname</code> parameter.</td>
+</tr></table><h3>Fields and Virtual Attributes</h3>
+
+<p>There is no requirement to define a schema within the model.</p>
+
+<p>By default every variable within the model is declared a database attribute however there are ways to define virtual attributes:</p>
+
+<pre><code>class test extends \mongoglue\Document{
+
+    /** @virtual */
+    public $lastRunEvent;
+
+}
+</code></pre>
+
+<p>Using the <code>@virtual</code> annotation in PHP Doc blocks you can actually assign virtual attributes to your model that will not be saved but can be treated like any other document variable,
+i.e. they can be validated.</p>
+
+<p>You can define defaults for any of your schema fields by simply adding them to your class and, in PHP, just assign a default within the class definition:</p>
+
+<pre><code>class test extends \mongoglue\Document{
+
+    public $lastRunEvent = 'None';
+
+}
+</code></pre>
+
+<table><tr>
+<td>Note:</td>
+<td>Unless you are knowledgable above this stuff it is best to stick to making all variables of the <code>public</code> scope.</td>
+</tr></table><h3>Events</h3>
+
+<p>The document class supports a number of events that can be used by not only you but alos other addons such as behaviours:</p>
+
+<p>If you return false from a <code>beforeX()</code> function, such as <code>beforeValidate()</code>, it will actually halt current processing stop further action within the model.</p>
+
+<p>Doing the same within a <code>afterX()</code> function will not have the same effect and further processing will continue regardless.</p>
+
+<ul>
+<li>
+<code>afterConstruct()</code> is quite self explanatory really, it runs after the class constructor but before setting attributes in the model</li>
+<li>
+<code>beforeFind()</code> run as the first thing before finding a document</li>
+<li>
+<code>afterFind()</code> runs as the last thing after finding a document</li>
+<li>
+<code>beforeValidate()</code> runs prior to validaton of the model</li>
+<li>
+<code>afterValidate()</code> runs after validation of the model</li>
+<li>
+<code>beforesave()</code> runs before the save of a document, whether it be insert or update (take heed of that last sentence when adding functionality there)</li>
+<li>
+<code>aftersave()</code> run after the save of a document, again, whether it be an insert or an update</li>
+<li>
+<code>beforeDelete()</code> runs before the deletion of the document</li>
+<li>
+<code>afterDelete()</code> runs after deletion of the document</li>
+</ul><h3>Scenarios</h3>
+
+<p>Scenarios enable different actions at different times. The scenarios can apply in both manual coding and in the validation of a model.</p>
+
+<p>By default a new model will have a scenario of <code>insert</code> and a saved model will have a scenario of <code>update</code>.</p>
+
+<p>Getters and setters are provided for the scenarios as part of the models public API:</p>
+
+<pre><code>function beforesave(){
+    $scenario = $this-&gt;getScenario();
+    $this-&gt;setScenario($scenario);
+}
+</code></pre>
+
+<h3>Relations</h3>
+
+<p>Relations are vey useful if you intend to have a relational model of some kind.</p>
+
+<p>You can define a set of relations via the <code>relations</code> function within the model:</p>
+
+<pre><code>function relations(){
+    return array(
+        'testDetail' =&gt; array('one', 'testDetail', 'test_id'),
+        'testDetails' =&gt; array('many', 'testDetail', 'test_id'),
+        'embeddedDetails' =&gt; array('many', 'testDetail', '_id', 'on' =&gt; 'test_ids'),
+        'conditionalDetails' =&gt; array('many', 'testDetail', 'test_id', 'where' =&gt; array(
+            'name' =&gt; 'Programming'
+        ))
+    );
+}
+</code></pre>
+
+<p>As seen from the examples above you can set a variety of different options on a relation however the relation can only consist of:</p>
+
+<ul>
+<li>A type as the first array position, <code>one</code> or <code>many</code>
+</li>
+<li>A model as the second array position, i.e. <code>User</code>
+</li>
+<li>A foreign key in the third position. By default mongoglue will attempt to connect the <code>_id</code> of the current document to the field you specify in the child document</li>
+<li>A <code>on</code> clause, incase the <code>_id</code> is not the foreign key</li>
+<li>A <code>where</code> clause to limit a relation</li>
+</ul><p>It should be noted that the relational behaviour can support either a single <code>ObjectId</code> or a <code>DBRef</code> or an array of <code>OjbectId</code>s as the key for what information use from the parent
+model to gather the children. As example, from the above code, <code>test_ids</code> is in fact an array of <code>ObjectId</code>s that denote all the <code>testDetail</code>s that are connected to this model.</p>
+
+<p>The realtions of the model can be accessed as either variables of the class (i.e. <code>$model-&gt;testDetail</code>) or using the <code>with()</code> function. The <code>with()</code> function provides the ability for you
+to add a relation and then later down the line specify the <code>where</code> parameter of the relation depending upon a dynamic set of variables within your application, a good example being:</p>
+
+<pre><code>$model-&gt;with('testdetail', array('name' =&gt; $nameOfInterest));
+</code></pre>
+
+<p>Using <code>with</code> this way will not overwrite the cached relation at the variable position in the class, instead it will make a whole new query to the database to retrieve this information
+specially for this case.</p>
+
+<table><tr>
+<td>Note:</td>
+<td>If you provide a <code>where</code> clause within the <code>with</code> function it will in fact merge with the <code>where</code> clause 
+        already existing within the delcared relation in the model.</td>
+</tr></table><table><tr>
+<td>Note:</td>
+<td>Automatic Cascading is not supported by default within the ORM</td>
+</tr></table><table><tr>
+<td>Note:</td>
+<td>MongoDB has no JOINs or relational integrity what-so-ever so you will need to take into account cascading etc on the application end.</td>
+</tr></table><h3>Behaviours</h3>
+
+<p>Behaviours are really useful if you want to add a common set of functions to many models. A good example of this is actually provided, as base, within this repository.</p>
+
+<p>The <code>Timestamp.php</code> file in the <code>behaviours</code> folder shows a pefect example of how common functionality can exist between many models. As you can see it hooks into <code>beforeSave</code> and
+implements a couple of helper functions.</p>
+
+<p>For an idea of what events the behaviour can implement look to the parent class in <code>\mongoglue\Behaviour</code>.</p>
+
+<p>A model can transpose the functions within the behaviour onto itself allowing you, in this case, to call something like:</p>
+
+<pre><code>$model-&gt;ago($model-&gt;created);
+</code></pre>
+
+<p>To get a user fiendly caption for how long ago the record was created.</p>
+
+<p>Behavours within the model sit within a function called <code>behaviours()</code> which returns an array of behaviours. As an example:</p>
+
+<pre><code>function behaviours(){
+    return array('Timestamp');
+}
+</code></pre>
+
+<p>A behaviour can also be passed certain information by the model to tell it how it should run. This is done within the behaviour declaration within the models <code>behaviours</code> function
+like so:</p>
+
+<pre><code>function behaviours(){
+    return array('Timestamp' =&gt; array('dateFormat' =&gt; 0));
+}
+</code></pre>
+
+<p>The keys within the nested array whose key is the behaviour name represent class properties.</p>
+
+<table><tr>
+<td>Note:</td>
+<td>behaviours have no requirement to extend from <code>\mongoglue\Behaviour</code> provided you have the functions in your own file as well.</td>
+</tr></table><table><tr>
+<td>Note:</td>
+<td>A behaviours event hooks into the model will be run before your own, so the <code>Timestamp</code>s <code>beforesave()</code> 
+        hook will run before your own in model one.</td>
+</tr></table><h3>Setting Unsanitised Attributes</h3>
+
+<p>If you wish to set the attributes of the model ready for validation you can use the <code>_attributes()</code> function which will use the defined rules you either entered into the <code>validate()</code>
+function or into the <code>rules()</code> model method to judge what fields should be set within the model and which should not. As an example:</p>
+
+<pre><code>$model-&gt;_attributes($_POST['user']);
+</code></pre>
+
+<p>Fields sent into this function that are not defined within the rules of the model (either through the <code>validate</code> or <code>rules</code> function) will be silently dropped. There will be no
+notification that they have been dropped.</p>
+
+<table><tr>
+<td>Note:</td>
+<td>Setting the attributes and validating them are two completely different things.</td>
+</tr></table><h3>Validation</h3>
+
+<p>Model validation is defined in two ways defined by calling the <code>validate()</code> function within the model. The function runs all rules defined, either adhoc within the <code>validate()</code>
+function signature or within the models <code>rules</code> function, and return a response denoting whether or not the model is valid (<code>true</code> if it is).</p>
+
+<p>An example of using the models rules functions:</p>
+
+<pre><code>function rules(){
+    return array(
+        array('name', 'string', 'allowEmpty' =&gt; false, 'message' =&gt; 'You must fill in a god damn name')
+    );
+}
+</code></pre>
+
+<p>And an example of using the validation adhoc within the <code>validate()</code> function:</p>
+
+<pre><code>$valid = $user-&gt;validate($data, array(
+    array('name', 'string', 'allowEmpty' =&gt; false, 'min' =&gt; 3, 'message' =&gt; 'You must have a username of 3 or more alpha numeric characters')
+));
+</code></pre>
+
+<p>The validators do not provide their own error messaging as such you must provide a <code>message</code> parameter in the rule if you wish it to report on an error.</p>
+
+<h4>Scenarios</h4>
+
+<p>The model rules support the model scenarios as well to ensure that only certain validation runs on certain events.</p>
+
+<p>A scenario based rule can be defined by defining a <code>on</code> parameter for the rule (in no particular place) with the value of the key being that of the scenario name.</p>
+
+<p>By default, adding no <code>on</code> clause to the rule will in fact make the rule run on all scenarios.</p>
+
+<h4>Validators</h4>
+
+<p>It is good to understand that mongoglue comes built in with some basic validators:</p>
+
+<ul>
+<li>
+<code>required</code> makes sure a value for the field is required</li>
+<li>
+<code>boolean</code> ensures a value is of type boolean</li>
+<li>
+<code>string</code> ensures a value of type string</li>
+<li>
+<code>objExist</code> can be used to ensure another object, defined by a condition, exists or not</li>
+<li>
+<code>in</code> ensures the value is in a range of other values</li>
+<li>
+<code>nin</code> ensures the values is not in a range of other values</li>
+<li>
+<code>regex</code> ensures the value either complies or does not comply to the regex inserted into the rule</li>
+<li>
+<code>compare</code> compares a value using specifically defined opreators (<code>=</code>,<code>&lt;=</code>,<code>&lt;</code>,<code>&gt;</code>,<code>&gt;=</code>,<code>!=</code>) whether or not the fields value compares with either a static value or a field</li>
+<li>
+<code>number</code> ensures the value is a number</li>
+<li>
+<code>url</code> ensures the value is a URL</li>
+<li>
+<code>tokenized</code> ensures that the value is tokenized (will normally return true) but more importantly will ensure that there is not more than <code>x</code> tokenized elements in the string</li>
+<li>
+<code>email</code> ensures that the value is a valid email</li>
+<li>
+<code>safe</code> just denotes the field should run no validation at all and should just be passed across (not a good thing to use)</li>
+</ul><table><tr>
+<td>Note:</td>
+<td>the email validator uses the PHP filter ( http://php.net/manual/en/filter.filters.validate.php )</td>
+</tr></table><p>You can add you own validators either in a behaviour, model or a custom validator file.</p>
+
+<p>Adding a validator within a behaviour or model is the same, just create a function in the class:</p>
+
+<pre><code>function myval($field, $value, $params){
+    return true;
+}
+</code></pre>
+
+<p>And then reference that within the rules:</p>
+
+<pre><code>array('myfield', 'myval', //Any params);
+</code></pre>
+
+<p>When the validation function runs to detect if the function exists it will be able to run it and return a response.</p>
+
+<p>As well as adding validators this way you can add your own class based validator (or some one elses) within the <code>/mongoglue/validators</code> folder. A basic validator setup is:</p>
+
+<p>namespace mongoglue\validators;</p>
+
+<pre><code>class tester extends \mongoglue\Validator{
+    function validate($attribute, $value){
+      // The regex basically says that if the name is less than 20 alpha numeric characters but 3+ then allow it
+      // Of course you don't need a dedicated validator for this you can just use the regex validator but this is being used
+      // for unit testing
+      if(preg_match('/^[0-9a-zA-Z]{3,20}$/', $value) &gt; 0){
+        return true;
+      }else{
+        return false;
+      }
+    }
+}
+</code></pre>
+
+<p>Whereby the <code>validate</code> function is the default run function whenever the validator is called which, just like the model/behaviour based validators, should return a <code>boolean</code> of success
+or failure.</p>
+
+<p>You are not required to extend the <code>\mongoglue\Validator</code> class but it does provide some base functionality that the framework does use, however it is easy enough to place within your
+own validator.</p>
+
+<p>A helper <code>isEmpty</code> is provided to quickly detect if the field is provided as empty.</p>
+
+<p>The owner (model) of the validator can be called by accessing the <code>$owner</code> property of the class. This provides you with full access to the parent model of the validator.</p>
+
+<table><tr>
+<td>Note:</td>
+<td>Even though errors (providing you know what your doing) can be set from the validation functions/classes it is recommended not to</td>
+</tr></table><table><tr>
+<td>Note:</td>
+<td>You must return a <code>boolean</code> of success or failure for each validator</td>
+</tr></table><h4>Embedding</h4>
+
+<p>You can embed documents within your root document to be validated at the same time.</p>
+
+<pre><code>$valid = $user-&gt;validate($data, array(
+    array('embedObjects', 'embedMany', 'testEmbed'),
+
+    array('address', 'embedMany', 'rules' =&gt; array(
+        array('road', 'string', 'allowEmpty' =&gt; false, 'message' =&gt; 'You must enter a road name'),
+        array('town', 'string', 'allowEmpty' =&gt; false, 'message' =&gt; 'You must enter a town name'),
+        array('county', 'string', 'allowEmpty' =&gt; false, 'message' =&gt; 'You must enter a county name'),
+        array('postal_code', 'string', 'allowEmpty' =&gt; false, 'message' =&gt; 'You must enter a post code')
+    ))
+));
+</code></pre>
+
+<p>The example above shows two methods of embedding: class based and pure array based.</p>
+
+<p>There are two embedding type avaiable: <code>embedOne</code> and <code>embedMany</code>. The <code>embedOne</code> will just create a sub array of properties while the <code>embedMany</code> will create an array of arrays of
+properties.</p>
+
+<p>To embed a classed object (i.e. <code>testEmbed</code>) you simply state the type of embedding and them the class name.</p>
+
+<p>To embed an array you state the embed type and then a set of rules. These rules will run separately to the root model and will act as though the root model is being validated all over
+again but for this subdocument. This means that technically you can put in any rule you want, if you wished even another embed rule.</p>
+
+<table><tr>
+<td>Note:</td>
+<td>There are no advanced control features for subdocument validation assignment like <code>$push</code> etc instead this behaviour must be done manually.</td>
+</tr></table><h5>Design Considerations</h5>
+
+<p>Even though it is perfectly supported and allowed within the ORM to embed object classes and multi-level embed it is not always considered good database or application design.</p>
+
+<p>Embedding many classed objects and many validation rules many levels can cause a huge recursion which can have a detrimental effect on the speed and memory usage of your application.
+Aside from that classed subdocuments are normally an "iffy" area due to the fact that they normal represent separate entities (i.e. <code>comments</code> embedded into a <code>post</code>).</p>
+
+<p>Please consider carefully about embedding and if in doubt either ask Stackoverflow ( <a href="http://www.stackoverflow.com">http://www.stackoverflow.com</a> ) or the <code>mongodb-user</code>
+( <a href="https://groups.google.com/forum/?fromgroups=#!forum/mongodb-user">https://groups.google.com/forum/?fromgroups=#!forum/mongodb-user</a> ) Google Group.</p>
+
+<h4>Validation Errors</h4>
+
+<p>Once the model has been validated there might be errors.</p>
+
+<p>To retrieve any errors in the model you can use <code>getErrors()</code> or <code>getFirstError()</code>.</p>
+
+<p>The errors are returned as an associative array of fields with each field having a sub array of error messages:</p>
+
+<pre><code>array
+    'name' =&gt;
+        array
+            0 =&gt; string 'That username already exists please try another.' (length=48)
+    'embedObjects' =&gt;
+        array
+            0 =&gt;
+                array
+                    'name' =&gt;
+                        array
+                        ...
+    'address' =&gt;
+            array
+                0 =&gt;
+                    array
+                        'road' =&gt;
+                            array
+                            ...
+                        'postal_code' =&gt;
+                            array
+                            ...
+                1 =&gt;
+                    array
+                        'county' =&gt;
+                            array
+                            ...
+                2 =&gt;
+                    array
+                        'postal_code' =&gt;
+                            array
+                            ...
+</code></pre>
+
+<p>The <code>embedObjects</code> and <code>address</code> fields represent subdocuments that have received errors. The format of these errors is depedant upon the embedding type. If it is <code>embedOne</code> it will
+just embed a set of fields exactly like the document however if the embedding type is <code>embedMany</code> then it will have a <code>0</code> indexed array of nested documents with their errors:</p>
+
+<pre><code>array
+    0 =&gt;
+        array
+            'road' =&gt;
+                array
+                    0 =&gt; string 'You must enter a road name' (length=26)
+            'postal_code' =&gt;
+                array
+                    0 =&gt; string 'You must enter a post code' (length=26)
+    1 =&gt;
+        array
+            'county' =&gt;
+                array
+                    0 =&gt; string 'You must enter a county name' (length=28)
+    2 =&gt;
+        array
+            'postal_code' =&gt;
+                array
+                    0 =&gt; string 'You must enter a post code' (length=26)
+</code></pre>
+
+<table><tr>
+<td>Note:</td>
+<td>The order of the document indexing within <code>embedMany</code> subdocuments is dependant upon how to assign it. 
+        If this comes from a <code>$_POST</code> then it will be in the same order as they are displayed in your form</td>
+</tr></table><h5>getErrors()</h5>
+
+<p>This function returns either all errors in the model, or if a field was provided as the parameter (i.e. <code>$model-&gt;getErrors('name')</code>) will get all errors for that field.</p>
+
+<h5>getFirstError()</h5>
+
+<p>Exactly the same as above except it will get the first error from the field. It will get the first global error is not field is defined.</p>
+
+<table><tr>
+<td>Note:</td>
+<td>
+<code>validate</code> also returns a <code>boolean</code> on whether the model validated or not, 
+        <code>true</code> to denote it did and <code>false</code> respectively.</td>
+</tr></table><h3>Setting Sanitised Attributes</h3>
+
+<table><tr>
+<td>Note:</td>
+<td>It is NOT advised you do this from a <code>$_POST</code> or other user entered data. Please do not PASS GO, go straight to JAIL.</td>
+</tr></table><p>When you know what you have is OK to put into the document without validation you can use the <code>setAttributes()</code> function providing it
+with a array of properties with the key of each element being the property name:</p>
+
+<pre><code>$model-&gt;setAttributes(array('name' =&gt; 'sammaye'))
+</code></pre>
+
+<h3>Getting the document</h3>
+
+<p>There are couple of functions to get the document back out of the model once you have placed it in. The one to use depends upon your need:</p>
+
+<ul>
+<li>If you only need database fields (no virtual attributes) you can use either <code>getDocument()</code> or <code>getRawDocument()</code>. The difference between the two being that <code>getRawDocument</code> returns
+any subdocuments etc stripped of their <code>\mongoglue\Document</code> class whereas <code>getDocument()</code> does not.</li>
+<li>If you need all attributes you can use <code>getAttributes()</code>. This function currently runs <code>getDocument()</code> and then merge those results with the virtual attributes to return a
+result</li>
+</ul><p>You can get both the BSON encoded and the JSON encoded version of the raw document by using <code>getBSONDocument()</code> or alternatively <code>getJSONDocument()</code>.</p>
+
+<h3>Saving</h3>
+
+<p>A document will and should always call the <code>save()</code> function, whether it be new or not. The <code>save()</code> function will automatically detect if the record should be inserted or updated
+and will peform the needed action. An example of using <code>save</code> is:</p>
+
+<pre><code>$model-&gt;save();
+</code></pre>
+
+<table><tr>
+<td>Note:</td>
+<td>By default validation is NOT set to run on everytime you call save. If you wish to run the models validation when you save you must pass `true` in as an additional parameter
+into the function signature like so:
+<pre><code>$model-&gt;save(true);</code></pre>
+</td>
+</tr></table><h3>Removing a Document</h3>
+
+<p>The model supports a <code>remove()</code> function which by default will deleted based on the <code>_id</code> of the document:</p>
+
+<pre><code>$model-&gt;remove();
+</code></pre>
+
+<table><tr>
+<td>Note:</td>
+<td>Currently the <code>primaryKey</code> function has no effect on how the remove function removes a document.</td>
+</tr></table><h3>Checking if it is a new record</h3>
+
+<p>There are two ways to check if the model is a new record in mongoglue, both inside the model and outside:</p>
+
+<ul>
+<li>You can use the insert scenario using <code>getScenario()</code> to understand if it is that current scenario</li>
+<li>The model actually provides a dedicated <code>isNew()</code> function which you can evaluate to either true or false directly.</li>
+</ul><h3>Cleaning and Reloading</h3>
+
+<p>Once every so often you might need to either clean and document or reload it completely from database because of some special case whereby active record did not work so well.</p>
+
+<p>The model has two functions: <code>clean()</code> and <code>refresh()</code>.</p>
+
+<p>The <code>clean</code> does exactly what it says on the tin however the <code>refresh</code> will run a <code>clean</code> (will actually call the <code>clean</code> function) and then replace the documents attributes.</p>
+
+<h2>Finding Documents</h2>
+
+<p>The document class acts as way to both find and save a record using active record. There are 3 methods for finding a record on the document class:</p>
+
+<pre><code>$db-&gt;select('test')-&gt;find()
+</code></pre>
+
+<p>Is analogous to the <code>find()</code> command in the MongoDB driver and will return a <code>\mongoglue\Cursor</code> of results.</p>
+
+<pre><code>$db-&gt;select('test')-&gt;findOne()
+</code></pre>
+
+<p>Is analogous to the <code>findOne()</code> command in the MongoDB driver and will return a <code>\mongoglue\Document</code> of the found document.</p>
+
+<pre><code>$db-&gt;select('test')-&gt;findById();
+</code></pre>
+
+<p>This function is a special helper for <code>findOne</code>. It will take either a <code>MongoId</code> or the hexadecimal string representation of an <code>ObjectId</code> (<code>MongoId</code>) and will return the found
+document.</p>
+
+<h3>Searching</h3>
+
+<p>You can use a function within each model called <code>search()</code> to search for all documents in a full text manner using regexes.</p>
+
+<p>The function has a signature of:</p>
+
+<pre><code>search(an_array_of_fields_to_search, a_term, an_extra_query_piece);
+</code></pre>
+
+<p>And can be exampled by:</p>
+
+<pre><code>$model-&gt;search(array('title', 'description'), 'sammaye', array('user_id' =&gt; new MongoId()));
+</code></pre>
+
+<table><tr>
+<td>Note:</td>
+<td>The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields. 
+        With MongoDB 2.4 this function will become obsolete due to the new full text search abilities, use this if you are on an older version of MongoDB.</td>
+</tr></table><table><tr>
+<td>Note:</td>
+<td>Please refer to the documentation page on <a href="http://docs.mongodb.org/manual/reference/operators/#_S_regex">$regex</a> where by it states:
+
+<blockquote> $regex can only use an index efficiently when the regular expression has an anchor for the beginning (i.e. ^) of a string and is a case-sensitive match.
+ Additionally, while /^a/, /^a.*/, and /^a.*$/ match equivalent strings, they have different performance characteristics. All of these expressions use an index if
+ an appropriate index exists; however, /^a.*/, and /^a.*$/ are slower. /^a/ can stop scanning after matching the prefix.</blockquote>
+
+This function uses index unfriendly regexes to perform its search. Please ensure you have something else which limits the query first i.e.:
+
+<pre><code>$model-&gt;search(array('title', 'description'), 'sammaye', array('user_id' =&gt; new MongoId()));</code></pre>
+
+Whereby I use the `user_id` to actually limit the query.</td>
+</tr></table><h2>The Cursor</h2>
+
+<p>You will very rarely use the cursor directly, however, it is good to know about it. Whenever you do a <code>find()</code> on an active record you will get back a <code>Cursor</code> (not a <code>MongoCursor</code>)
+which works like the <code>MongoCursor</code> but should be not be confused with it. It is an active record version of the <code>MongoCursor</code> specially built for mongoglue which, with each iteration,
+lazy loads the model and fills in the properties.</p>
+
+<p>The cursor can be called directly, like a data provider:</p>
+
+<pre><code>new \mongoglue\Cursor(array('name' =&gt; 'sammaye'), 'test', $db);
+</code></pre>
+
+<p>The first parameter being an array of the query and the second being a string of the class name and the third being the <code>\mongoglue\Database</code> object.</p>
+
+<p>It is, of course, easier to normally just call it straight from the model via <code>$model-&gt;find()</code>.</p>
+
+<table><tr>
+<td>Note:</td>
+<td>There is no eager load option on the cursor</td>
+</tr></table><h2>Aggregation Framework</h2>
+
+<p>Mongoglue does not support the aggregation framework as such (aggregation and active record never goes well together) but it does have a helper with which to do aggregation on the model:</p>
+
+<pre><code>$model-&gt;aggregate(array(//whatever))
+</code></pre>
+
+<p>It is basically a helper that points directly to the drivers own <code>aggregate</code> function so it works exactly the same.</p>
+
+<h2>Write Concern</h2>
+
+<p>The default write concern for mongoglue is <code>1</code> ( <a href="http://php.net/manual/en/mongo.writeconcerns.php">http://php.net/manual/en/mongo.writeconcerns.php</a> ) with journal ack off. You can change these defaults using:</p>
+
+<pre><code>$mongo-&gt;writeConcern = 'majority';
+$mongo-&gt;journaled = true;
+</code></pre>
+
+<p>You can also set the write concern per query, taking the previous example:</p>
+
+<pre><code>$db-&gt;select('user')-&gt;setAttributes(array('name' =&gt; 'sammaye'))-&gt;save(array('w' =&gt; 'majority', 'j' =&gt; true));
+</code></pre>
 
 <h2>Documentation notes</h2>
 
 <p>As I said earlier. A lot of the documentation and examples can be found in various files within the <code>tests</code> folder. The <code>tests</code> folder is designed to provide a set of standard
 tests with full examples of using 99% of the ORMs functionality. The file <code>document.php</code> and the models in <code>tests/documents</code> would be of particular interest to new users.</p>
+
+<h2>Known Flaws</h2>
+
+<ul>
+<li>mongoglue does not support field selectivity at the moment </li>
+<li>mongoglue does not support <a href="http://docs.mongodb.org/manual/applications/indexes/#create-indexes-that-support-covered-queries">covered queries</a>
+</li>
+<li>mongoglue cannot eager load relationships for models for use with in-memory sorting on the application end</li>
+</ul><p>And probably more but that's what I could think of immediately. </p>
       </section>
       <footer>
-        <p>This project is maintained by <a href="https://github.com/Sammaye">Sammaye</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+        <p>Project maintained by <a href="https://github.com/Sammaye">Sammaye</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
       </footer>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
   </body>
 </html>
