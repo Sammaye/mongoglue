@@ -100,8 +100,13 @@ To provide an example of connection switching in mongoglue here is a snippet:
 	// Now we reset the connection to default
 	$mongo->setConnection('default');
 
-Note: the server class is referenced to all of its database and model classes which means that changing the connection on the server class has an effect on all the other classes you
-use that reference that server object.
+
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>the server class is referenced to all of its database and model classes which means that changing the connection on the server class has an effect on all the other classes you
+use that reference that server object.</td></tr>
+	</tbody>
+</table>
 
 Note: Connections will not "reset" themselves after a single operation, the connection will persist as the new master connection until it is either removed or switched out.
 
