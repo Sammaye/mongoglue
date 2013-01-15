@@ -116,13 +116,13 @@ use that reference that server object.</td></tr>
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>the connection you first put into the constructor of the server class will be labelled as the `default` connection and will persist in the connections array with such a label.</td></tr>
+		<tr><td>Note:</td><td>the connection you first put into the constructor of the server class will be labelled as the <code>default</code> connection and will persist in the connections array with such a label.</td></tr>
 	</tbody>
 </table>
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>the `selectCollection` function has been deprecated in mongoglue on the server class. Unlike the driver I have decided to go with a full deprecation of this function since it
+		<tr><td>Note:</td><td>the <code>selectCollection</code> function has been deprecated in mongoglue on the server class. Unlike the driver I have decided to go with a full deprecation of this function since it
 was a blurring of roles. The server should deal with selecting databases not collections.</td></tr>
 	</tbody>
 </table>
@@ -179,7 +179,7 @@ There are numerous little pieces of information and detail you can add to your m
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>if you use the server object you must also supply a database name in the `$dbname` parameter.</td></tr>
+		<tr><td>Note:</td><td>if you use the server object you must also supply a database name in the <code>$dbname</code> parameter.</td></tr>
 	</tbody>
 </table>
 
@@ -209,7 +209,7 @@ You can define defaults for any of your schema fields by simply adding them to y
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>Unless you are knowledgable above this stuff it is best to stick to making all variables of the `public` scope.</td></tr>
+		<tr><td>Note:</td><td>Unless you are knowledgable above this stuff it is best to stick to making all variables of the <code>public</code> scope.</td></tr>
 	</tbody>
 </table>
 
@@ -282,7 +282,8 @@ specially for this case.
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>If you provide a `where` clause within the `with` function it will in fact merge with the `where` clause already existing within the delcared relation in the model.</td></tr>
+		<tr><td>Note:</td><td>If you provide a <code>where</code> clause within the <code>with</code> function it will in fact merge with the <code>where</code> clause 
+		already existing within the delcared relation in the model.</td></tr>
 	</tbody>
 </table>
 
@@ -330,13 +331,14 @@ The keys within the nested array whose key is the behaviour name represent class
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>behaviours have no requirement to extend from `\mongoglue\Behaviour` provided you have the functions in your own file as well.</td></tr>
+		<tr><td>Note:</td><td>behaviours have no requirement to extend from <code>\mongoglue\Behaviour</code> provided you have the functions in your own file as well.</td></tr>
 	</tbody>
 </table>
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>A behaviours event hooks into the model will be run before your own, so tghe `Timestamp`s `beforesave()` hook will run before your own in model one.</td></tr>
+		<tr><td>Note:</td><td>A behaviours event hooks into the model will be run before your own, so the <code>Timestamp</code>s <code>beforesave()</code> 
+		hook will run before your own in model one.</td></tr>
 	</tbody>
 </table>
 
@@ -458,7 +460,7 @@ The owner (model) of the validator can be called by accessing the `$owner` prope
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>You must return a `boolean` of success or failure for each validator</td></tr>
+		<tr><td>Note:</td><td>You must return a <code>boolean</code> of success or failure for each validator</td></tr>
 	</tbody>
 </table>
 
@@ -489,7 +491,7 @@ again but for this subdocument. This means that technically you can put in any r
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>There are no advanced control features for subdocument validation assignment like `$push` etc instead this behaviour must be done manually.</td></tr>
+		<tr><td>Note:</td><td>There are no advanced control features for subdocument validation assignment like <code>$push</code> etc instead this behaviour must be done manually.</td></tr>
 	</tbody>
 </table>
 
@@ -568,8 +570,8 @@ just embed a set of fields exactly like the document however if the embedding ty
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>The order of the document indexing within `embedMany` subdocuments is dependant upon how to assign it. If this comes from a `$_POST` then it will be in the same order as they are
-displayed in your form</td></tr>
+		<tr><td>Note:</td><td>The order of the document indexing within <code>embedMany</code> subdocuments is dependant upon how to assign it. 
+		If this comes from a <code>$_POST</code> then it will be in the same order as they are displayed in your form</td></tr>
 	</tbody>
 </table>
 
@@ -583,7 +585,8 @@ Exactly the same as above except it will get the first error from the field. It 
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>`validate` also returns a `boolean` on whether the model validated or not, `true` to denote it did and `false` respectively.</td></tr>
+		<tr><td>Note:</td><td><code>validate</code> also returns a <code>boolean</code> on whether the model validated or not, 
+		<code>true</code> to denote it did and <code>false</code> respectively.</td></tr>
 	</tbody>
 </table>
 
@@ -591,7 +594,7 @@ Exactly the same as above except it will get the first error from the field. It 
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>It is NOT advised you do this from a `$_POST` or other user entered data. Please do not PASS GO, go straight to JAIL.</td></tr>
+		<tr><td>Note:</td><td>It is NOT advised you do this from a <code>$_POST</code> or other user entered data. Please do not PASS GO, go straight to JAIL.</td></tr>
 	</tbody>
 </table>
 
@@ -622,8 +625,8 @@ and will peform the needed action. An example of using `save` is:
 	<tbody>
 		<tr><td>Note:</td><td>By default validation is NOT set to run on everytime you call save. If you wish to run the models validation when you save you must pass `true` in as an additional parameter
 into the function signature like so:
-
-	$model->save(true);</td></tr>
+<pre><code>
+	$model->save(true);</code></pre></td></tr>
 	</tbody>
 </table>
 
@@ -635,7 +638,7 @@ The model supports a `remove()` function which by default will deleted based on 
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>Currently the `primaryKey` function has no effect on how the remove function removes a document.</td></tr>
+		<tr><td>Note:</td><td>Currently the <code>primaryKey</code> function has no effect on how the remove function removes a document.</td></tr>
 	</tbody>
 </table>
 
@@ -692,15 +695,17 @@ And can be exampled by:
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>Please refer to the documentation page on [$regex](http://docs.mongodb.org/manual/reference/operators/#_S_regex) where by it states:
+		<tr><td>Note:</td><td>Please refer to the documentation page on <a href="http://docs.mongodb.org/manual/reference/operators/#_S_regex">$regex</a> where by it states:
 
-> $regex can only use an index efficiently when the regular expression has an anchor for the beginning (i.e. ^) of a string and is a case-sensitive match.
-> Additionally, while /^a/, /^a.*/, and /^a.*$/ match equivalent strings, they have different performance characteristics. All of these expressions use an index if
-> an appropriate index exists; however, /^a.*/, and /^a.*$/ are slower. /^a/ can stop scanning after matching the prefix.
+<blockquote> $regex can only use an index efficiently when the regular expression has an anchor for the beginning (i.e. ^) of a string and is a case-sensitive match.
+ Additionally, while /^a/, /^a.*/, and /^a.*$/ match equivalent strings, they have different performance characteristics. All of these expressions use an index if
+ an appropriate index exists; however, /^a.*/, and /^a.*$/ are slower. /^a/ can stop scanning after matching the prefix.</blockquote>
 
 This function uses index unfriendly regexes to perform its search. Please ensure you have something else which limits the query first i.e.:
 
+<pre><code>
     $model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
+</code></pre>
 
 Whereby I use the `user_id` to actually limit the query.</td></tr>
 	</tbody>
