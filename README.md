@@ -738,7 +738,7 @@ It is basically a helper that points directly to the drivers own `aggregate` fun
 
 ## Write Concern
 
-Mongoglue implements abstracts the write concern from the driver. This is mainly to support global ack writes on older versions of the driver (pre-1.3).
+Mongoglue abstracts the write concern from the driver. This is to support global ack writes on older versions of the driver (pre-1.3).
 
 The default write concern for mongoglue is `1` ( http://php.net/manual/en/mongo.writeconcerns.php ) with journal ack off. You can change these defaults using:
 
