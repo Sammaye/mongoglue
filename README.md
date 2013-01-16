@@ -282,7 +282,7 @@ specially for this case.
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>If you provide a <code>where</code> clause within the <code>with</code> function it will in fact merge with the <code>where</code> clause 
+		<tr><td>Note:</td><td>If you provide a <code>where</code> clause within the <code>with</code> function it will in fact merge with the <code>where</code> clause
 		already existing within the delcared relation in the model.</td></tr>
 	</tbody>
 </table>
@@ -337,7 +337,7 @@ The keys within the nested array whose key is the behaviour name represent class
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>A behaviours event hooks into the model will be run before your own, so the <code>Timestamp</code>s <code>beforesave()</code> 
+		<tr><td>Note:</td><td>A behaviours event hooks into the model will be run before your own, so the <code>Timestamp</code>s <code>beforesave()</code>
 		hook will run before your own in model one.</td></tr>
 	</tbody>
 </table>
@@ -570,7 +570,7 @@ just embed a set of fields exactly like the document however if the embedding ty
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>The order of the document indexing within <code>embedMany</code> subdocuments is dependant upon how to assign it. 
+		<tr><td>Note:</td><td>The order of the document indexing within <code>embedMany</code> subdocuments is dependant upon how to assign it.
 		If this comes from a <code>$_POST</code> then it will be in the same order as they are displayed in your form</td></tr>
 	</tbody>
 </table>
@@ -585,7 +585,7 @@ Exactly the same as above except it will get the first error from the field. It 
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td><code>validate</code> also returns a <code>boolean</code> on whether the model validated or not, 
+		<tr><td>Note:</td><td><code>validate</code> also returns a <code>boolean</code> on whether the model validated or not,
 		<code>true</code> to denote it did and <code>false</code> respectively.</td></tr>
 	</tbody>
 </table>
@@ -684,10 +684,10 @@ The function has a signature of:
 And can be exampled by:
 
 	$model->search(array('title', 'description'), 'sammaye', array('user_id' => new MongoId()));
-	
+
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields. 
+		<tr><td>Note:</td><td>The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields.
 		With MongoDB 2.4 this function will become obsolete due to the new full text search abilities, use this if you are on an older version of MongoDB.</td></tr>
 	</tbody>
 </table>
@@ -738,6 +738,8 @@ It is basically a helper that points directly to the drivers own `aggregate` fun
 
 ## Write Concern
 
+Mongoglue implements abstracts the write concern from the driver. This is mainly to support global ack writes on older versions of the driver (pre-1.3).
+
 The default write concern for mongoglue is `1` ( http://php.net/manual/en/mongo.writeconcerns.php ) with journal ack off. You can change these defaults using:
 
 	$mongo->writeConcern = 'majority';
@@ -754,8 +756,8 @@ tests with full examples of using 99% of the ORMs functionality. The file `docum
 
 ## Known Flaws
 
-- mongoglue does not support field selectivity at the moment 
+- mongoglue does not support field selectivity at the moment
 - mongoglue does not support [covered queries](http://docs.mongodb.org/manual/applications/indexes/#create-indexes-that-support-covered-queries)
 - mongoglue cannot eager load relationships for models for use with in-memory sorting on the application end
 
-And probably more but that's what I could think of immediately. 
+And probably more but that's what I could think of immediately.
