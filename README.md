@@ -16,7 +16,7 @@ Lithium and CakePHP (etc) actually work.
 When I decided to incorporate this as a separate module from that previous project the intention I had in mind was to create an Active Record model slimmer and more transparent
 to the driver than Doctrine 2. I suppose you could say I designed this to sit in the middle area between the driver and Doctrine 2 in terms of usage.
 
-Another concern that made the list was that I wanted this ORM to be simlper in programming and execution than most ORMs like Doctrine. I wanted the end user of this to be able to look 
+Another concern that made the list was that I wanted this ORM to be simpler in programming and execution than most ORMs like Doctrine. I wanted the end user of this to be able to look 
 at, modify and maintain it without having to wait for patches from me. There is nothing worse than when a developer decides to leave something and now you are 
 stuck with the consequences. So this is designed to be quite simple in programming and should, with about a days worth of looking at it, be easy enough to maintain even if I don't.
 
