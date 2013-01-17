@@ -379,6 +379,13 @@ And an example of using the validation adhoc within the `validate()` function:
 
 The validators do not provide their own error messaging as such you must provide a `message` parameter in the rule if you wish it to report on an error.
 
+A rule consists of 4 main parts:
+
+- First is the fields, this can be either a single field or a comma deliminated set of fields in a string (just like Yii)
+- Second is the validator, by name.
+- A `message` key that denotes the error message for this field
+- A set of params (shown above is `allowEmpty`) for the rule to run on
+
 #### Scenarios
 
 The model rules support the model scenarios as well to ensure that only certain validation runs on certain events.
@@ -572,6 +579,14 @@ just embed a set of fields exactly like the document however if the embedding ty
 	<tbody>
 		<tr><td>Note:</td><td>The order of the document indexing within <code>embedMany</code> subdocuments is dependant upon how to assign it.
 		If this comes from a <code>$_POST</code> then it will be in the same order as they are displayed in your form</td></tr>
+	</tbody>
+</table>
+
+<table>
+	<tbody>
+		<tr><td>Note:</td><td>The way the validation rules are built up effects where error messages are placed. If you build rules one field at a time the validate function 
+		will in fact place any error is receives on that single field, however, if you have a comma deliminated string of fields it will place the error within a `global` key 
+		in the errors array since rules do not (unlike Yii) place errors per field defined inside the rule.</td></tr>
 	</tbody>
 </table>
 
