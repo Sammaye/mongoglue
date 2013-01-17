@@ -585,8 +585,8 @@ just embed a set of fields exactly like the document however if the embedding ty
 <table>
 	<tbody>
 		<tr><td>Note:</td><td>The way the validation rules are built up effects where error messages are placed. If you build rules one field at a time the validate function 
-		will in fact place any error is receives on that single field, however, if you have a comma deliminated string of fields it will place the error within a `global` key 
-		in the errors array since rules do not (unlike Yii) place errors per field defined inside the rule.</td></tr>
+		will place any errors it receives about a field onto a key in the array of that fields name, however, if you have a comma deliminated string of fields it will 
+		place the error within a `global` key in the errors array, since rules do not (unlike Yii) place errors per field defined inside the rule.</td></tr>
 	</tbody>
 </table>
 
