@@ -16,8 +16,8 @@ Lithium and CakePHP (etc) actually work.
 When I decided to incorporate this as a separate module from that previous project the intention I had in mind was to create an Active Record model slimmer and more transparent
 to the driver than Doctrine 2. I suppose you could say I designed this to sit in the middle area between the driver and Doctrine 2 in terms of usage.
 
-Another concern that made the list was that I wanted this ORM to be simpler in programming and execution than most ORMs like Doctrine. I wanted the end user of this to be able to look 
-at, modify and maintain it without having to wait for patches from me. There is nothing worse than when a developer decides to leave something and now you are 
+Another concern that made the list was that I wanted this ORM to be simpler in programming and execution than most ORMs like Doctrine. I wanted the end user of this to be able to look
+at, modify and maintain it without having to wait for patches from me. There is nothing worse than when a developer decides to leave something and now you are
 stuck with the consequences. So this is designed to be quite simple in programming and should, with about a days worth of looking at it, be easy enough to maintain even if I don't.
 
 ## The Core
@@ -588,8 +588,8 @@ just embed a set of fields exactly like the document however if the embedding ty
 
 <table>
 	<tbody>
-		<tr><td>Note:</td><td>The way the validation rules are built up effects where error messages are placed. If you build rules one field at a time the validate function 
-		will place any errors it receives about a field onto a key in the array of that fields name, however, if you have a comma deliminated string of fields it will 
+		<tr><td>Note:</td><td>The way the validation rules are built up effects where error messages are placed. If you build rules one field at a time the validate function
+		will place any errors it receives about a field onto a key in the array of that fields name, however, if you have a comma deliminated string of fields it will
 		place the error within a `global` key in the errors array, since rules do not (unlike Yii) place errors per field defined inside the rule.</td></tr>
 	</tbody>
 </table>
@@ -775,8 +775,11 @@ tests with full examples of using 99% of the ORMs functionality. The file `docum
 
 ## Known Flaws
 
-- mongoglue does not support field selectivity at the moment
-- mongoglue does not support [covered queries](http://docs.mongodb.org/manual/applications/indexes/#create-indexes-that-support-covered-queries)
-- mongoglue cannot eager load relationships for models for use with in-memory sorting on the application end
+- Does not support field selectivity at the moment
+- Does not support [covered queries](http://docs.mongodb.org/manual/applications/indexes/#create-indexes-that-support-covered-queries)
+- Does not eager load relationships for models for use with in-memory sorting on the application end
+- Does not support automatic cascading
 
 And probably more but that's what I could think of immediately.
+
+I should mention these flaws are not fundamental to mongoglue, they are merely aspects which are not implemented (yet possibly...).
