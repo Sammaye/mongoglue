@@ -782,4 +782,4 @@ tests with full examples of using 99% of the ORMs functionality. The file `docum
 
 And probably more but that's what I could think of immediately.
 
-I should mention these flaws are not fundamental to mongoglue, they are merely aspects which are not implemented (yet possibly...).
+I should mention that these flaws are not fundamental to how mongoglue works, they are merely aspects which are not implemented (yet possibly...).
