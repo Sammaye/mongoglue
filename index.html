@@ -57,6 +57,10 @@ Lithium and CakePHP (etc) actually work.</p>
 <p>When I decided to incorporate this as a separate module from that previous project the intention I had in mind was to create an Active Record model slimmer and more transparent
 to the driver than Doctrine 2. I suppose you could say I designed this to sit in the middle area between the driver and Doctrine 2 in terms of usage.</p>
 
+<p>Another concern that made the list was that I wanted this ORM to be simpler in programming and execution than most ORMs like Doctrine. I wanted the end user of this to be able to look
+at, modify and maintain it without having to wait for patches from me. There is nothing worse than when a developer decides to leave something and now you are
+stuck with the consequences. So this is designed to be quite simple in programming and should, with about a days worth of looking at it, be easy enough to maintain even if I don't.</p>
+
 <h2>The Core</h2>
 
 <p>It is important to note that not all the files you see in this repository are actually needed.</p>
@@ -323,7 +327,7 @@ specially for this case.</p>
 
 <table><tr>
 <td>Note:</td>
-<td>If you provide a <code>where</code> clause within the <code>with</code> function it will in fact merge with the <code>where</code> clause 
+<td>If you provide a <code>where</code> clause within the <code>with</code> function it will in fact merge with the <code>where</code> clause
         already existing within the delcared relation in the model.</td>
 </tr></table><table><tr>
 <td>Note:</td>
@@ -369,7 +373,7 @@ like so:</p>
 <td>behaviours have no requirement to extend from <code>\mongoglue\Behaviour</code> provided you have the functions in your own file as well.</td>
 </tr></table><table><tr>
 <td>Note:</td>
-<td>A behaviours event hooks into the model will be run before your own, so the <code>Timestamp</code>s <code>beforesave()</code> 
+<td>A behaviours event hooks into the model will be run before your own, so the <code>Timestamp</code>s <code>beforesave()</code>
         hook will run before your own in model one.</td>
 </tr></table><h3>Setting Unsanitised Attributes</h3>
 
@@ -408,7 +412,14 @@ function signature or within the models <code>rules</code> function, and return 
 
 <p>The validators do not provide their own error messaging as such you must provide a <code>message</code> parameter in the rule if you wish it to report on an error.</p>
 
-<h4>Scenarios</h4>
+<p>A rule consists of 4 main parts:</p>
+
+<ul>
+<li>First is the fields, this can be either a single field or a comma deliminated set of fields in a string (just like Yii)</li>
+<li>Second is the validator, by name.</li>
+<li>A <code>message</code> key that denotes the error message for this field</li>
+<li>A set of params (shown above is <code>allowEmpty</code>) for the rule to run on</li>
+</ul><h4>Scenarios</h4>
 
 <p>The model rules support the model scenarios as well to ensure that only certain validation runs on certain events.</p>
 
@@ -606,8 +617,13 @@ just embed a set of fields exactly like the document however if the embedding ty
 
 <table><tr>
 <td>Note:</td>
-<td>The order of the document indexing within <code>embedMany</code> subdocuments is dependant upon how to assign it. 
+<td>The order of the document indexing within <code>embedMany</code> subdocuments is dependant upon how to assign it.
         If this comes from a <code>$_POST</code> then it will be in the same order as they are displayed in your form</td>
+</tr></table><table><tr>
+<td>Note:</td>
+<td>The way the validation rules are built up effects where error messages are placed. If you build rules one field at a time the validate function
+        will place any errors it receives about a field onto a key in the array of that fields name, however, if you have a comma deliminated string of fields it will
+        place the error within a `global` key in the errors array, since rules do not (unlike Yii) place errors per field defined inside the rule.</td>
 </tr></table><h5>getErrors()</h5>
 
 <p>This function returns either all errors in the model, or if a field was provided as the parameter (i.e. <code>$model-&gt;getErrors('name')</code>) will get all errors for that field.</p>
@@ -619,7 +635,7 @@ just embed a set of fields exactly like the document however if the embedding ty
 <table><tr>
 <td>Note:</td>
 <td>
-<code>validate</code> also returns a <code>boolean</code> on whether the model validated or not, 
+<code>validate</code> also returns a <code>boolean</code> on whether the model validated or not,
         <code>true</code> to denote it did and <code>false</code> respectively.</td>
 </tr></table><h3>Setting Sanitised Attributes</h3>
 
@@ -718,7 +734,7 @@ document.</p>
 
 <table><tr>
 <td>Note:</td>
-<td>The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields. 
+<td>The search is very primative. It does not detect ranking nor relavance, merely just finds documents with those terms in the specified fields.
         With MongoDB 2.4 this function will become obsolete due to the new full text search abilities, use this if you are on an older version of MongoDB.</td>
 </tr></table><table><tr>
 <td>Note:</td>
@@ -762,6 +778,8 @@ lazy loads the model and fills in the properties.</p>
 
 <h2>Write Concern</h2>
 
+<p>Mongoglue abstracts the write concern from the driver. This is to support global ack writes on older versions of the driver (pre-1.3).</p>
+
 <p>The default write concern for mongoglue is <code>1</code> ( <a href="http://php.net/manual/en/mongo.writeconcerns.php">http://php.net/manual/en/mongo.writeconcerns.php</a> ) with journal ack off. You can change these defaults using:</p>
 
 <pre><code>$mongo-&gt;writeConcern = 'majority';
@@ -781,11 +799,14 @@ tests with full examples of using 99% of the ORMs functionality. The file <code>
 <h2>Known Flaws</h2>
 
 <ul>
-<li>mongoglue does not support field selectivity at the moment </li>
-<li>mongoglue does not support <a href="http://docs.mongodb.org/manual/applications/indexes/#create-indexes-that-support-covered-queries">covered queries</a>
+<li>Does not support field selectivity at the moment</li>
+<li>Does not support <a href="http://docs.mongodb.org/manual/applications/indexes/#create-indexes-that-support-covered-queries">covered queries</a>
 </li>
-<li>mongoglue cannot eager load relationships for models for use with in-memory sorting on the application end</li>
-</ul><p>And probably more but that's what I could think of immediately. </p>
+<li>Does not eager load relationships for models for use with in-memory sorting on the application end</li>
+<li>Does not support automatic cascading</li>
+</ul><p>And probably more but that's what I could think of immediately.</p>
+
+<p>I should mention that these flaws are not fundamental to how mongoglue works, they are merely aspects which are not implemented (yet possibly...).</p>
       </section>
       <footer>
         <p>Project maintained by <a href="https://github.com/Sammaye">Sammaye</a></p>
