@@ -2,8 +2,9 @@
 
 This is a very simple ORM designed for MongoDB.
 
-It is very much designed as a kind of [Fisher-Price](http://www.fisher-price.com/en_US/products/55197) "My First Active Record". Irrespective of that fact this ORM has
-been extensively tested in a live environment (as part of another project) and has been found to be quite fitting to most security needs.
+It is very much designed as a kind of [Fisher-Price](http://www.fisher-price.com/en_US/products/55197) "My First Active Record". Irrespective of that fact the ideas expressed in this 
+ORM and most parts of the code that build it up have been extensively tested in a live environment (as part of another project) and has been found to be quite fitting for most security 
+needs.
 
 A lot of the documentation and examples can be found within the `tests` folder where PHPUnit tests are performed on each section of the ORM. The file `document.php`
 and the models in `tests/documents` would be of particular interest to new users.
