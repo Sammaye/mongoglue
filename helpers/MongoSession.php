@@ -16,6 +16,18 @@ namespace mongoglue\helpers;
  */
 class MongoSession{
 
+	public $collection = 'sessions';
+	
+	public $w = 1;
+	
+	public $journaled = false;
+	
+	/**
+	 * Houses the database object that we are currently using
+	 * @var \mongoglue\Database
+	 */
+	public $db;	
+
 	/**
 	 * This decides the lifetime (in seconds) of the session
 	 *
@@ -34,24 +46,18 @@ class MongoSession{
 	private $_sessions = array();
 
 	/**
-	 * Houses the database object that we are currently using
-	 * @var \mongoglue\Database
-	 */
-	public $db;
-
-	/**
 	 * Constructor
 	 */
 	function __construct($connection, $dbname = null) {
 
 		// No active record for this bad boy
-		if($connection instanceof \mongoglue\Database){
+		if($connection instanceof \mongoglue\Database || $connection instanceof \MongoDB){
 			$this->db = $db;
-		}elseif($connection instanceof \mongoglue\Server && $dbname){
+		}elseif(($connection instanceof \mongoglue\Server || $connection instanceof Mongo || $connection instanceof MongoClient) && $dbname){
 			$this->db = $connection->$dbname;
 		}else{
 			// Throw error that this class isn't being used right
-			trigger_error("Please call the MongoSession class with either a mongoglue database or server");
+			trigger_error("Please call the MongoSession class with either a mongoglue/mongo database or server");
 		}
 
 		// Ensure index on Session ID, this is handled by the Indexes file if your using that
@@ -114,7 +120,7 @@ class MongoSession{
 		// Fetch session data from the selected database
 		$time = time();
 
-		$this->_sessions = $this->db->sessions->findOne(array("session_id"=>$id));
+		$this->_sessions = $this->getCollection()->findOne(array("session_id"=>$id));
 
 		if (!empty($this->_sessions)) {
 			$data = $this->_sessions['session_data'];
@@ -151,7 +157,8 @@ class MongoSession{
 			"active"=>1
 		);
 
-		$fg = $this->db->sessions->update(array("session_id"=>$id), array('$set'=>$fields), array("fsync"=>1, "upsert"=>true));
+		$fg = $this->getCollection()->update(array("session_id"=>$id), array('$set'=>$fields), 
+				array_merge($this->getDefaultWriteConcern(), array("upsert"=>true)));
 
 		// DONE
 		return true;
@@ -166,7 +173,7 @@ class MongoSession{
 	function destroy( $id ) {
 
 		// Remove from Db
-		$this->db->sessions->remove(array("session_id" => $id), true);
+		$this->getCollection()->remove(array("session_id" => $id), $this->getDefaultWriteConcern());
 
 		return true;
 	}
@@ -179,8 +186,26 @@ class MongoSession{
 	 * @todo Make a cronjob to delete all sessions after about a day old and are still inactive
 	 */
 	function gc() {
-		$this->db->sessions->remove(array('expires' => array('$lt' => strtotime('+2 weeks'))));
+		$this->getCollection()->remove(array('expires' => array('$lt' => strtotime('+2 weeks'))), $this->getDefaultWriteConcern());
 		return true;
 	}
-
+	
+	function getCollection(){
+		return $this->db->{$this->collection};
+	}
+	
+	/**
+	 * Gets the default write concern options for all queries through active record
+	 * @return array
+	 */
+	function getDefaultWriteConcern(){
+		if(version_compare(phpversion('mongo'), '1.3.0', '<')){
+			if((bool)$this->writeConcern){
+				return array('safe' => true);
+			}
+		}else{
+			return array('w' => $this->writeConern, 'j' => $this->journaled);
+		}
+		return array();
+	}
 }
