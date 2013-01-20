@@ -16,10 +16,22 @@ namespace mongoglue\helpers;
  */
 class MongoSession{
 
+	/**
+	 * The collection that sessions will be stored in
+	 * @var string
+	 */
 	public $collection = 'sessions';
 	
+	/**
+	 * The write concern, 1 means acked write
+	 * @var int|string
+	 */
 	public $w = 1;
 	
+	/**
+	 * The journal part of write concern, normally never need this to be true
+	 * @var boolean
+	 */
 	public $journaled = false;
 	
 	/**
@@ -190,6 +202,9 @@ class MongoSession{
 		return true;
 	}
 	
+	/**
+	 * Gets the RAW collection for us to work on
+	 */
 	function getCollection(){
 		return $this->db->{$this->collection};
 	}
@@ -200,11 +215,11 @@ class MongoSession{
 	 */
 	function getDefaultWriteConcern(){
 		if(version_compare(phpversion('mongo'), '1.3.0', '<')){
-			if((bool)$this->writeConcern){
+			if((bool)$this->w){
 				return array('safe' => true);
 			}
 		}else{
-			return array('w' => $this->writeConern, 'j' => $this->journaled);
+			return array('w' => $this->w, 'j' => $this->journaled);
 		}
 		return array();
 	}
