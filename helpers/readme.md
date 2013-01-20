@@ -10,6 +10,10 @@ Provides basic encryption and hashing functions for passwords and other senstive
 
 The hashing function within this file uses bcrypt and the encryption function uses AES 256.
 
+## GridView
+
+Provides basic grid view abilities for tabular data in MongoDB for use with mongoglue.
+
 ## html
 
 The HTML helper provides access to basic form and other HTML creation within the mongoglue ORM. It is merely designed to be a base object and it is strongly recommended
